@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17100F">
+<title>chozen. — Product Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17100F; --bg2:#1F1613; --card:#241A17; --card2:#2C211D;
+  --gold:#D8B486; --gold2:#ECCFA6; --rose:#E0AE9E;
+  --text:#F3E6DD; --muted:rgba(243,230,221,.62); --faint:rgba(243,230,221,.34);
+  --line:rgba(216,180,134,.16); --line2:rgba(216,180,134,.30);
+  --green:#7BD8A0;
+}
+*,*::before,*::after{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  background:radial-gradient(120% 60% at 50% 0%, #241715 0%, #120C0B 60%, #0C0807 100%);
+  background-attachment:fixed;
+  font-family:'DM Sans',-apple-system,'Helvetica Neue',sans-serif;
+  color:var(--text); line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+.wrap{ max-width:780px; margin:0 auto; padding:0 28px; }
+.serif{ font-family:'Fraunces',serif; }
+.gold{ color:var(--gold2); }
+.eyebrow{ font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); }
+
+/* hero */
+.hero{ padding:108px 0 64px; border-bottom:1px solid var(--line); }
+.logo{ font-family:'Fraunces',serif; font-size:30px; font-weight:600; letter-spacing:-1px; color:var(--gold2); margin-bottom:42px; }
+.logo .dot{ color:var(--rose); }
+.hero h1{ font-family:'Fraunces',serif; font-weight:600; font-size:clamp(40px,7.5vw,66px); line-height:1.03; letter-spacing:-1.8px; margin:18px 0 24px; }
+.hero .lede{ font-size:19.5px; color:var(--muted); max-width:610px; }
+.meta{ display:flex; flex-wrap:wrap; gap:28px; margin-top:42px; }
+.meta div{ font-size:13.5px; }
+.meta b{ display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:4px; font-weight:700; }
+.meta span{ color:var(--muted); }
+
+/* sections */
+section{ padding:64px 0; border-bottom:1px solid var(--line); }
+section h2{ font-family:'Fraunces',serif; font-weight:600; font-size:clamp(28px,4.6vw,38px); letter-spacing:-.6px; line-height:1.1; margin:14px 0 24px; }
+section p{ font-size:16.5px; color:#E8D7CC; margin-bottom:18px; }
+section p.muted{ color:var(--muted); }
+em{ color:var(--gold2); font-style:italic; }
+strong{ color:#fff; font-weight:600; }
+
+/* manifesto */
+.manifesto{ text-align:center; padding:80px 0; }
+.manifesto p{ font-family:'Fraunces',serif; font-size:clamp(23px,3.6vw,30px); line-height:1.42; color:var(--text); max-width:660px; margin:0 auto 22px; }
+.manifesto .small{ font-family:'DM Sans'; font-size:16px; color:var(--muted); max-width:560px; }
+.manifesto .sign{ font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-top:26px; }
+
+/* callout / insight */
+.insight{ border-left:2px solid var(--gold); padding:18px 0 18px 26px; margin:30px 0; }
+.insight .serif{ font-size:24px; line-height:1.34; color:var(--text); }
+
+/* two fears */
+.fears{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:28px; }
+.fear{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:26px; }
+.fear .k{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--rose); font-weight:700; }
+.fear h4{ font-family:'Fraunces',serif; font-size:21px; font-weight:600; margin:8px 0 10px; letter-spacing:-.3px; }
+.fear p{ font-size:14.5px; color:var(--muted); margin:0; }
+.fear .ans{ font-size:14.5px; color:var(--gold2); margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+
+/* cards grid */
+.grid{ display:grid; gap:16px; margin-top:26px; }
+.g2{ grid-template-columns:1fr 1fr; }
+.g3{ grid-template-columns:repeat(3,1fr); }
+.card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px; }
+.card h4{ font-size:15px; font-weight:600; margin-bottom:8px; color:#fff; }
+.card p{ font-size:13.5px; color:var(--muted); margin:0; line-height:1.55; }
+.card .num{ font-family:'Fraunces',serif; font-size:30px; color:var(--gold2); display:block; margin-bottom:6px; }
+
+/* decision blocks */
+.dec{ background:linear-gradient(180deg,var(--card) 0%,var(--bg2) 100%); border:1px solid var(--line); border-radius:20px; padding:26px 26px 24px; margin-top:20px; }
+.dec .tag{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); font-weight:700; }
+.dec h4{ font-family:'Fraunces',serif; font-size:21px; font-weight:600; margin:6px 0 12px; letter-spacing:-.3px; }
+.dec .row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:14px; }
+.dec .row > div b{ display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-bottom:5px; font-weight:700; }
+.dec .row > div p{ font-size:14px; color:#E8D7CC; margin:0; }
+.dec .why{ font-size:14.5px; color:var(--gold2); margin-top:16px; padding-top:14px; border-top:1px solid var(--line); }
+
+ul.clean{ list-style:none; margin:18px 0; }
+ul.clean li{ font-size:15.5px; color:#E8D7CC; padding:11px 0 11px 26px; position:relative; border-bottom:1px solid var(--line); }
+ul.clean li:before{ content:'✦'; position:absolute; left:0; color:var(--gold); font-size:12px; top:13px; }
+ul.clean li b{ color:#fff; }
+
+/* flow steps */
+.flow{ display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; align-items:center; }
+.flow span{ background:var(--card); border:1px solid var(--line); padding:8px 15px; border-radius:30px; font-size:13.5px; color:var(--text); }
+.flow .arr{ color:var(--gold); border:none; background:none; padding:0 2px; font-size:12px; }
+.flow .key{ border-color:var(--line2); background:rgba(216,180,134,.1); color:var(--gold2); font-weight:600; }
+
+.cta{ display:inline-flex; gap:9px; align-items:center; margin-top:8px; font-family:'DM Sans'; font-size:15px; font-weight:600; background:linear-gradient(120deg,var(--gold),var(--gold2)); color:#2A1B12; padding:14px 26px; border-radius:30px; text-decoration:none; box-shadow:0 14px 34px rgba(216,180,134,.2); }
+.foot{ padding:54px 0 90px; text-align:center; color:var(--faint); font-size:13px; }
+.foot .logo{ font-size:22px; margin-bottom:14px; }
+
+@media(max-width:600px){
+  .meta{ gap:18px; } .g2,.g3,.fears{ grid-template-columns:1fr; } .dec .row{ grid-template-columns:1fr; }
+  .hero{ padding:74px 0 50px; } .manifesto{ padding:56px 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="logo">chozen<span class="dot">.</span></div>
+    <span class="eyebrow">Product Case Study · 0→1 Concept</span>
+    <h1>Choosing yourself shouldn't take <em>courage</em>.</h1>
+    <p class="lede">chozen is a place to explore beauty &amp; self-care rituals — and book them — without fear of being judged, and without fear of being harmed. Because the only thing standing between someone and the version of themselves they want should never be doubt.</p>
+    <div class="meta">
+      <div><b>Role</b><span>Product — thesis, strategy, design, prototype</span></div>
+      <div><b>Surface</b><span>Mobile app (clickable prototype)</span></div>
+      <div><b>Market</b><span>India · UAE-validated category</span></div>
+      <div><b>Stage</b><span>Concept → high-fidelity prototype</span></div>
+    </div>
+  </header>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <p>A generation grew up watching beauty on Instagram, TikTok, Snapchat. They don't see microblading or lip blush as procedures. They see <em>becoming</em> — a fuller, more confident, more <em>themselves</em> version of who they already are.</p>
+    <p>And yet, when they go to actually do it, two things stop them: <em>will I be judged for it</em>, and <em>is this even safe</em>. chozen exists to remove both.</p>
+    <p class="small">Nobody should have to defend wanting to feel like the best version of themselves — not before, not after. And nobody should have to gamble their face on whether the person, the tools, and the chemicals were safe.</p>
+    <div class="sign">— why I'm building chozen</div>
+  </section>
+
+  <!-- THE BELIEF -->
+  <section>
+    <span class="eyebrow">The belief</span>
+    <h2>It's not vanity. It's authorship.</h2>
+    <p>Getting a ritual done isn't about being "fake," or fixing something that was wrong. It's a person deciding, on their own terms, to feel happier in their skin — and that choice deserves no apology. The taboo around it — <em>"she got something done," "she didn't look good before"</em> — is the real thing holding people back, more than money, more than time.</p>
+    <p>So chozen starts from a stance, not a feature list: <strong>your rituals are yours, chozen by you, no one else.</strong> We design every screen to make exploring feel private, normal, and celebrated — never something to be quietly ashamed of.</p>
+    <div class="insight">
+      <p class="serif">But you can't feel confident about a choice you don't feel safe making. <em>Confidence requires trust.</em> That single line is the whole product.</p>
+    </div>
+  </section>
+
+  <!-- TWO FEARS -->
+  <section>
+    <span class="eyebrow">The problem, honestly</span>
+    <h2>The category is booming. The trust isn't.</h2>
+    <p>These services are everywhere on the feed and adored by the generation — but there is <strong>no place you can actually trust.</strong> Discovery is scattered across Instagram saves, WhatsApp referrals and Google reviews, and underneath the pretty grid sit two real fears no one is answering:</p>
+    <div class="fears">
+      <div class="fear">
+        <span class="k">Fear one — being judged</span>
+        <h4>"What will people think?"</h4>
+        <p>The taboo is exhausting. People hide that they're even considering it, can't ask openly, and second-guess a choice that should feel joyful.</p>
+        <p class="ans">chozen reframes it as a ritual you choose for yourself — explored privately, spoken about warmly, never clinical or apologetic.</p>
+      </div>
+      <div class="fear">
+        <span class="k">Fear two — being harmed</span>
+        <h4>"Is this actually safe?"</h4>
+        <p>Are the chemicals safe? Are the tools sterile? Does this person have real experience — and are they following the protocols these procedures legally demand? Today, you simply can't tell.</p>
+        <p class="ans">chozen verifies it for you: qualified professionals, hygiene &amp; equipment standards, and protocol compliance — so the only thing you decide is that you want it.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:26px">The promise underneath both: <strong>you decide you want it. We take care of the rest — done right, safely, by the right hands.</strong></p>
+  </section>
+
+  <!-- WHO -->
+  <section>
+    <span class="eyebrow">Who I'm building for first</span>
+    <h2>A 22-year-old, just starting out</h2>
+    <p>The first person chozen is for is a woman in her early twenties who's just begun her career. She's fluent in aesthetics, comfortable online, and she <em>wants</em> these rituals — she sees them every day and they feel like part of becoming who she's growing into.</p>
+    <p class="muted">What stops her isn't desire. It's the fear of being judged, the fear of getting it wrong, and a price tag that feels like "luxury" on an early-career salary. chozen has to dissolve all three — and the last one matters more than people admit. <strong>Feeling like your best self shouldn't be gated by what you earn at 23.</strong></p>
+  </section>
+
+  <!-- HOW: experience -->
+  <section>
+    <span class="eyebrow">How chozen delivers it</span>
+    <h2>An experience built around removing fear</h2>
+    <p>Every part of the flow maps to one of the three things in her way — judgment, safety, or cost. The journey is built around a single act, <em>book the ritual</em>, with each step quietly removing a reason to hesitate.</p>
+    <div class="flow">
+      <span>Splash</span><span class="arr">→</span>
+      <span class="key">Swipe to explore</span><span class="arr">→</span>
+      <span>Your ritual / home</span><span class="arr">→</span>
+      <span>Service</span><span class="arr">→</span>
+      <span>Compare verified providers</span><span class="arr">→</span>
+      <span>Provider profile</span><span class="arr">→</span>
+      <span class="key">Book in parts</span><span class="arr">→</span>
+      <span>Confirmation</span>
+    </div>
+    <div class="grid g2" style="margin-top:30px">
+      <div class="card"><h4>Explore without explaining yourself</h4><p>A private, swipe-through deck of rituals replaces any quiz or interrogation. Curiosity costs nothing and asks nothing of you.</p></div>
+      <div class="card"><h4>See it on your own face</h4><p>A try-on lets you picture the outcome on yourself — privately — so the question "will it look right on <em>me</em>" gets answered before anyone else is involved.</p></div>
+      <div class="card"><h4>Trust you can read at a glance</h4><p>Every provider shows their qualification (PMU artist · dermatologist · cosmetologist), real attributed work, and that hygiene &amp; protocol standards are met.</p></div>
+      <div class="card"><h4>Access with dignity</h4><p>Pay-in-parts sits on top of every ritual by default — so the right professional is reachable without it feeling like a luxury she has to be rich to deserve.</p></div>
+    </div>
+  </section>
+
+  <!-- DECISIONS -->
+  <section>
+    <span class="eyebrow">Product decisions</span>
+    <h2>The choices, and why I made them</h2>
+    <p class="muted">Each of these is a place where the obvious product move would have quietly reintroduced one of the three fears. So I chose differently.</p>
+
+    <div class="dec">
+      <span class="tag">Removing judgment</span>
+      <h4>Swipe to explore — never a quiz</h4>
+      <div class="row">
+        <div><b>The obvious move</b><p>A 4-step onboarding quiz: budget, concern, goal, longevity.</p></div>
+        <div><b>What I did</b><p>A private swipe-through deck of rituals that quietly builds a personalised home.</p></div>
+      </div>
+      <p class="why">Why: a quiz makes you declare and defend what you want before you're ready — the exact discomfort that keeps people away. Swiping lets curiosity stay private and pressure-free, and turns the same signal into delight instead of an interrogation.</p>
+    </div>
+
+    <div class="dec">
+      <span class="tag">Removing the cost barrier</span>
+      <h4>Pay-in-parts as the default — not a price range</h4>
+      <div class="row">
+        <div><b>The obvious move</b><p>Show ₹15k–40k and let her filter by budget.</p></div>
+        <div><b>What I did</b><p>One confident price per ritual, with pay-in-parts (1 / 3 / 6) shown by default, 0% interest.</p></div>
+      </div>
+      <p class="why">Why: a ₹30,000 number kills the feeling at the worst moment and whispers "this isn't for someone like you." "₹X a month" says the opposite — the right artist or dermatologist is within reach. It's a values choice about access, not a checkout feature. Ranges also signal uncertainty; one honest price signals trust.</p>
+    </div>
+
+    <div class="dec">
+      <span class="tag">Removing the fear of harm</span>
+      <h4>Trust as the spine, not a badge</h4>
+      <div class="row">
+        <div><b>The obvious move</b><p>Marketplace-style: most listings, best prices, sort by rating.</p></div>
+        <div><b>What I did</b><p>Curate to verified providers and surface qualification, real work, hygiene &amp; protocol compliance up front.</p></div>
+      </div>
+      <p class="why">Why: this output is semi-permanent and lives on your face — safety isn't a filter, it's the entire promise. I'd rather show fewer providers I can vouch for than win on breadth. Trust is the moat and the hardest thing to fake, so it's designed in, not bolted on.</p>
+    </div>
+
+    <div class="dec">
+      <span class="tag">Matching how the decision is really made</span>
+      <h4>Browse the outcome, then meet the person</h4>
+      <div class="row">
+        <div><b>The obvious move</b><p>Browse salons / providers first.</p></div>
+        <div><b>What I did</b><p>Ritual → see real results → compare who can deliver it → profile → book. The provider comes last.</p></div>
+      </div>
+      <p class="why">Why: people commit to the outcome before they commit to a person. Leading with providers forces a trust decision too early. Leading with the result she wants — then showing who can safely deliver it — matches the actual order of the decision.</p>
+    </div>
+  </section>
+
+  <!-- WHY THESE SERVICES -->
+  <section>
+    <span class="eyebrow">The category</span>
+    <h2>Why these rituals, why now</h2>
+    <p>I chose the services chozen launches with deliberately: the ones <strong>booming in the market and adored by this generation</strong> — microblading, lip blush, lash extensions, semi-permanent eyeliner, HydraFacials and the like — yet still <strong>homeless</strong>, with no trusted consumer brand sitting between the person and the provider.</p>
+    <ul class="clean">
+      <li><b>~40 real rituals across 6 categories</b> — brows, lashes, lips, eyes, skin, PMU — each with real pricing, sessions and how long results last.</li>
+      <li><b>Outcome-first, not clinical.</b> We lead with the feeling and the result, never the procedure name. Rituals, not treatments.</li>
+      <li><b>The UAE proves the appetite</b> for a premium-but-approachable version of this category at scale; India is on the same path.</li>
+      <li><b>Repeat by nature</b> — lash lifts, facials, touch-ups — which means trust, once earned, compounds.</li>
+    </ul>
+  </section>
+
+  <!-- ROADMAP -->
+  <section>
+    <span class="eyebrow">What's next</span>
+    <h2>If this were funded tomorrow</h2>
+    <div class="grid g3">
+      <div class="card"><h4>Phase 1 — Earn trust</h4><p>One city, a small set of providers I can fully vouch for, the 6 core categories. Win on safety &amp; confidence, not breadth.</p></div>
+      <div class="card"><h4>Phase 2 — Real try-on</h4><p>Ship the generative "see it on me." It's the most differentiated reason to open the app, and it removes doubt privately.</p></div>
+      <div class="card"><h4>Phase 3 — Go deeper</h4><p>Laser, Botox, fillers, PRP — higher-stakes rituals that only become possible once the trust is genuinely earned.</p></div>
+    </div>
+  </section>
+
+  <!-- REFLECTION -->
+  <section>
+    <span class="eyebrow">Why I built this</span>
+    <h2>What it shows about how I work</h2>
+    <p>I didn't start chozen from a feature or a market map. I started from something I believe — that wanting to feel like your best self is not something to be judged for, and that the only reason people hesitate is fear. Then I worked backwards: what would it take to remove the fear of judgment, the fear of harm, and the fear of cost — and built the product as the answer to those three.</p>
+    <p class="muted">That's how I think about product: find the real human reason someone stops, and design the specific thing that lets them keep going. The case for the category, the ICP, the service taxonomy from real pricing, the full flow, and a high-fidelity clickable prototype — I took all of it end to end myself, to make the belief real enough to feel, not just describe.</p>
+  </section>
+
+  <!-- CTA -->
+  <section style="text-align:center; border-bottom:none">
+    <h2>See it for yourself</h2>
+    <p class="muted" style="max-width:480px; margin:0 auto 26px">The full experience is a tappable, phone-native demo — best opened on a phone.</p>
+    <a class="cta" href="chozen-share.html">Open the chozen prototype →</a>
+  </section>
+
+  <footer class="foot">
+    <div class="logo">chozen<span class="dot">.</span></div>
+    chozen by you, no one else.<br>
+    Product concept &amp; prototype · 2026
+  </footer>
+
+</div>
+</body>
+</html>

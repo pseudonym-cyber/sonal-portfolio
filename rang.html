@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0E0610">
+<title>rang. — Product Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E0610; --bg2:#160A18; --card:#1C0E20; --card2:#241228;
+  --pink:#E91E8C; --pink2:#FF6FB5; --gold:#FFD700; --cyan:#80EEFF; --green:#22C55E;
+  --text:#F6E7F1; --muted:rgba(246,231,241,.62); --faint:rgba(246,231,241,.34);
+  --line:rgba(233,30,140,.18); --line2:rgba(233,30,140,.34);
+}
+*,*::before,*::after{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  background:radial-gradient(120% 60% at 50% 0%, #1E0A1C 0%, #120612 60%, #0B040C 100%);
+  background-attachment:fixed;
+  font-family:'DM Sans',-apple-system,'Helvetica Neue',sans-serif;
+  color:var(--text); line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+.wrap{ max-width:780px; margin:0 auto; padding:0 28px; }
+.serif{ font-family:'Syne',sans-serif; }
+.gold{ color:var(--pink2); }
+.eyebrow{ font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--pink); }
+
+/* hero */
+.hero{ padding:108px 0 64px; border-bottom:1px solid var(--line); }
+.logo{ font-family:'Syne',sans-serif; font-size:30px; font-weight:800; letter-spacing:-1px; color:var(--pink2); margin-bottom:42px; }
+.logo .dot{ color:var(--gold); }
+.hero h1{ font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(38px,7.2vw,62px); line-height:1.04; letter-spacing:-1.6px; margin:18px 0 24px; }
+.hero .lede{ font-size:19.5px; color:var(--muted); max-width:610px; }
+.meta{ display:flex; flex-wrap:wrap; gap:28px; margin-top:42px; }
+.meta div{ font-size:13.5px; }
+.meta b{ display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--pink); margin-bottom:4px; font-weight:700; }
+.meta span{ color:var(--muted); }
+
+/* sections */
+section{ padding:64px 0; border-bottom:1px solid var(--line); }
+section h2{ font-family:'Syne',sans-serif; font-weight:700; font-size:clamp(27px,4.4vw,37px); letter-spacing:-.6px; line-height:1.12; margin:14px 0 24px; }
+section p{ font-size:16.5px; color:#EFDDE8; margin-bottom:18px; }
+section p.muted{ color:var(--muted); }
+em{ color:var(--pink2); font-style:italic; }
+strong{ color:#fff; font-weight:600; }
+
+/* manifesto */
+.manifesto{ text-align:center; padding:80px 0; }
+.manifesto p{ font-family:'Syne',sans-serif; font-weight:500; font-size:clamp(22px,3.4vw,29px); line-height:1.4; color:var(--text); max-width:660px; margin:0 auto 22px; }
+.manifesto .small{ font-family:'DM Sans'; font-weight:400; font-size:16px; color:var(--muted); max-width:560px; }
+.manifesto .sign{ font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--pink); margin-top:26px; }
+
+/* callout / insight */
+.insight{ border-left:2px solid var(--pink); padding:18px 0 18px 26px; margin:30px 0; }
+.insight .serif{ font-size:23px; line-height:1.36; color:var(--text); font-weight:600; }
+
+/* two cards */
+.fears{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:28px; }
+.fear{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:26px; }
+.fear .k{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); font-weight:700; }
+.fear h4{ font-family:'Syne',sans-serif; font-size:20px; font-weight:700; margin:8px 0 10px; letter-spacing:-.3px; }
+.fear p{ font-size:14.5px; color:var(--muted); margin:0; }
+.fear .ans{ font-size:14.5px; color:var(--pink2); margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+
+/* cards grid */
+.grid{ display:grid; gap:16px; margin-top:26px; }
+.g2{ grid-template-columns:1fr 1fr; }
+.g3{ grid-template-columns:repeat(3,1fr); }
+.card{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px; }
+.card h4{ font-size:15px; font-weight:600; margin-bottom:8px; color:#fff; }
+.card p{ font-size:13.5px; color:var(--muted); margin:0; line-height:1.55; }
+.card .num{ font-family:'Syne',sans-serif; font-size:30px; font-weight:800; color:var(--pink2); display:block; margin-bottom:6px; }
+
+/* decision blocks */
+.dec{ background:linear-gradient(180deg,var(--card) 0%,var(--bg2) 100%); border:1px solid var(--line); border-radius:20px; padding:26px 26px 24px; margin-top:20px; }
+.dec .tag{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--pink); font-weight:700; }
+.dec h4{ font-family:'Syne',sans-serif; font-size:20px; font-weight:700; margin:6px 0 12px; letter-spacing:-.3px; }
+.dec .row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:14px; }
+.dec .row > div b{ display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-bottom:5px; font-weight:700; }
+.dec .row > div p{ font-size:14px; color:#EFDDE8; margin:0; }
+.dec .why{ font-size:14.5px; color:var(--pink2); margin-top:16px; padding-top:14px; border-top:1px solid var(--line); }
+
+ul.clean{ list-style:none; margin:18px 0; }
+ul.clean li{ font-size:15.5px; color:#EFDDE8; padding:11px 0 11px 26px; position:relative; border-bottom:1px solid var(--line); }
+ul.clean li:before{ content:'\2726'; position:absolute; left:0; color:var(--pink); font-size:12px; top:13px; }
+ul.clean li b{ color:#fff; }
+
+/* flow steps */
+.flow{ display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; align-items:center; }
+.flow span{ background:var(--card); border:1px solid var(--line); padding:8px 15px; border-radius:30px; font-size:13.5px; color:var(--text); }
+.flow .arr{ color:var(--pink); border:none; background:none; padding:0 2px; font-size:12px; }
+.flow .key{ border-color:var(--line2); background:rgba(233,30,140,.12); color:var(--pink2); font-weight:600; }
+
+.cta{ display:inline-flex; gap:9px; align-items:center; margin-top:8px; font-family:'DM Sans'; font-size:15px; font-weight:600; background:linear-gradient(120deg,var(--pink),var(--pink2)); color:#fff; padding:14px 26px; border-radius:30px; text-decoration:none; box-shadow:0 14px 34px rgba(233,30,140,.28); }
+.foot{ padding:54px 0 90px; text-align:center; color:var(--faint); font-size:13px; }
+.foot .logo{ font-size:22px; margin-bottom:14px; }
+
+@media(max-width:600px){
+  .meta{ gap:18px; } .g2,.g3,.fears{ grid-template-columns:1fr; } .dec .row{ grid-template-columns:1fr; }
+  .hero{ padding:74px 0 50px; } .manifesto{ padding:56px 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="logo">rang<span class="dot">.</span></div>
+    <span class="eyebrow">Product Case Study · 0→1 Concept</span>
+    <h1>Beauty shouldn't start with a <em>search bar</em>.</h1>
+    <p class="lede">rang is a personalised beauty discovery &amp; shopping app that starts from who you are — your vibe — not a catalogue of ten thousand products. Because the hard part of beauty was never buying it. It was knowing what's actually <em>for you</em>.</p>
+    <div class="meta">
+      <div><b>Role</b><span>Product — thesis, strategy, design, prototype</span></div>
+      <div><b>Surface</b><span>Mobile app (clickable prototype)</span></div>
+      <div><b>Market</b><span>India · D2C beauty &amp; personal care</span></div>
+      <div><b>Stage</b><span>Concept → high-fidelity prototype</span></div>
+    </div>
+  </header>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <p>A generation discovers beauty through reels, hauls and GRWM videos. They don't shop by SKU — they fall for a <em>look</em>, a vibe, a version of themselves they want to try on.</p>
+    <p>But every beauty app hands them the same thing: a search box on top of an endless shelf. So they save forty reels, screenshot ingredient lists, poll a WhatsApp group — and still aren't sure it's right for <em>them</em>.</p>
+    <p class="small">rang flips that. Tell us your vibe, and we'll find your rang — the products, the routine and the look that are actually yours. No more buying one more thing that wasn't meant for you.</p>
+    <div class="sign">— why I'm building rang</div>
+  </section>
+
+  <!-- THE BELIEF -->
+  <section>
+    <span class="eyebrow">The belief</span>
+    <h2>Curation is the product. The catalogue is just inventory.</h2>
+    <p>Selection stopped being the moat the day every brand went online. With thousands of near-identical serums and foundations one tap away, more choice doesn't help — it <em>paralyses</em>. What's scarce now is a point of view: someone who looks at all of it and says, <strong>this one, for you.</strong></p>
+    <p>So rang starts from identity, not inventory. <strong>Find your rang — chosen for your vibe, not the bestseller list.</strong> Every screen is built to make a person feel seen first, then shop what fits with confidence.</p>
+    <div class="insight">
+      <p class="serif">But you can't personalise what you don't understand — and you can't fake understanding. <em>Relevance requires honesty.</em> That single line runs through the whole product.</p>
+    </div>
+  </section>
+
+  <!-- TWO FAILURES -->
+  <section>
+    <span class="eyebrow">The problem, honestly</span>
+    <h2>The shelf is infinite. The guidance is zero.</h2>
+    <p>Beauty e-commerce solved access and quietly broke discovery. Underneath the pretty grid, two things go wrong for the person trying to choose:</p>
+    <div class="fears">
+      <div class="fear">
+        <span class="k">Problem one — choice paralysis</span>
+        <h4>"Which one is even for me?"</h4>
+        <p>Hundreds of look-alike options, ratings averaged over strangers with different skin, and no point of view. So she defaults to the bestseller — or buys nothing at all.</p>
+        <p class="ans">rang turns a wall of SKUs into a short, personal edit built around her vibe — a curated few she can actually trust.</p>
+      </div>
+      <div class="fear">
+        <span class="k">Problem two — the trust gap</span>
+        <h4>"Will this actually work on me?"</h4>
+        <p>Reviews come from people unlike her. She's been burned before by a hyped product that didn't suit her skin, so every new buy feels like a gamble.</p>
+        <p class="ans">rang shows proof from people who share her vibe, plus an AI expert that builds the routine — not just sells the bottle.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:26px">The promise underneath both: <strong>she tells us her vibe; we do the sifting — and only show her what's genuinely hers.</strong></p>
+  </section>
+
+  <!-- WHO -->
+  <section>
+    <span class="eyebrow">Who I'm building for first</span>
+    <h2>A 23-year-old who's into it — and overwhelmed by it</h2>
+    <p>The first person rang is for grew up on beauty content. She has a wishlist of looks she's saved and a graveyard of products that didn't suit her. She's not a beginner and not an expert — she's <em>enthusiastic and unsure</em>.</p>
+    <p class="muted">What stops her isn't interest or budget. It's the paralysis of infinite shelves and the fear of wasting money on one more thing that isn't for her. So rang has to make her feel <strong>known in the first thirty seconds</strong> — and right every time after that.</p>
+  </section>
+
+  <!-- HOW -->
+  <section>
+    <span class="eyebrow">How rang delivers it</span>
+    <h2>An experience built around being known</h2>
+    <p>Every part of the flow maps to one of the two things in her way — paralysis or doubt. The journey is built around a single shift: from <em>browsing a catalogue</em> to <em>being handed your edit</em>.</p>
+    <div class="flow">
+      <span>Magazine cover</span><span class="arr">→</span>
+      <span>Pick your world</span><span class="arr">→</span>
+      <span class="key">Swipe your vibe</span><span class="arr">→</span>
+      <span>Your rang</span><span class="arr">→</span>
+      <span>Personalised edit</span><span class="arr">→</span>
+      <span>People like you</span><span class="arr">→</span>
+      <span class="key">AI routine</span><span class="arr">→</span>
+      <span>Shop</span>
+    </div>
+    <div class="grid g2" style="margin-top:30px">
+      <div class="card"><h4>Discover by vibe, not keyword</h4><p>A swipe deck reads your vibe in seconds — no quiz, no search box. Curiosity is the input; a feed that feels like <em>you</em> is the output.</p></div>
+      <div class="card"><h4>A vibe with a name</h4><p>"The Glass Skin Girlie" — an identity you recognise, not a faceless "recommended for you." Curation that feels like a friend, not an algorithm.</p></div>
+      <div class="card"><h4>Proof from people like you</h4><p>Results and videos from divas who share your vibe — relevance over volume, because beauty outcomes are personal and a 4.5★ average isn't.</p></div>
+      <div class="card"><h4>An expert that builds the routine</h4><p>rang. AI is always on to turn products into a routine for <em>your</em> skin — the part every catalogue leaves you to figure out alone.</p></div>
+    </div>
+  </section>
+
+  <!-- DECISIONS -->
+  <section>
+    <span class="eyebrow">Product decisions</span>
+    <h2>The choices, and why I made them</h2>
+    <p class="muted">At each of these, the obvious e-commerce move would have quietly rebuilt the same overwhelming shelf. So I chose differently.</p>
+
+    <div class="dec">
+      <span class="tag">Removing choice paralysis</span>
+      <h4>Swipe your vibe — never a search bar</h4>
+      <div class="row">
+        <div><b>The obvious move</b><p>A search box and filter rails on top of the full catalogue.</p></div>
+        <div><b>What I did</b><p>A playful swipe deck that reads vibe, then opens a short, personal edit.</p></div>
+      </div>
+      <p class="why">Why: search only helps people who already know the answer — and most don't. They know the <em>feeling</em> they want, not the SKU. Leading with vibe turns "what do I even look for" into "this is so me," and makes the catalogue feel curated instead of infinite.</p>
+    </div>
+
+    <div class="dec">
+      <span class="tag">Making curation feel personal</span>
+      <h4>A named vibe, not "recommended for you"</h4>
+      <div class="row">
+        <div><b>The obvious move</b><p>A silent "Recommended for you" rail powered by an algorithm.</p></div>
+        <div><b>What I did</b><p>A named persona — "The Glass Skin Girlie" — she can see, own and share.</p></div>
+      </div>
+      <p class="why">Why: "recommended" is invisible and forgettable; a named identity is memorable, shareable, and makes personalisation feel like being understood rather than tracked. It also gives every screen downstream a single, clear point of view.</p>
+    </div>
+
+    <div class="dec">
+      <span class="tag">Earning trust</span>
+      <h4>"People like you," not aggregate stars</h4>
+      <div class="row">
+        <div><b>The obvious move</b><p>Sort by rating; lead with 4.6★ across 12k reviews.</p></div>
+        <div><b>What I did</b><p>Surface real results and videos from people who share her vibe.</p></div>
+      </div>
+      <p class="why">Why: a five-star average across strangers with different skin tells her almost nothing. Ten results from people <em>like her</em> tell her everything. Beauty outcomes are personal, so the proof has to be too.</p>
+    </div>
+
+    <div class="dec">
+      <span class="tag">Honesty over false confidence</span>
+      <h4>Admit what we can't rank yet</h4>
+      <div class="row">
+        <div><b>The obvious move</b><p>Rank every product confidently and hide the uncertainty.</p></div>
+        <div><b>What I did</b><p>Flag new launches as "not enough data to rank yet, but worth discovering."</p></div>
+      </div>
+      <p class="why">Why: faking confidence is exactly how a personalisation product loses trust the first time a "top pick" flops. Saying "we don't know yet, but this is interesting" treats her like an adult — and trust, once earned, is the whole reason she comes back.</p>
+    </div>
+  </section>
+
+  <!-- CATEGORY -->
+  <section>
+    <span class="eyebrow">The category</span>
+    <h2>Why beauty, why this way</h2>
+    <p>I chose beauty because it's where India's D2C boom is loudest and discovery is most broken — a category with <strong>thousands of launches a year, sky-high intent, and no one truly owning <em>personal</em> curation</strong> between the brand and the buyer.</p>
+    <ul class="clean">
+      <li><b>Two worlds, one identity</b> — skincare and makeup, unified under a single vibe so the edit feels coherent, not bolted together.</li>
+      <li><b>Vibe-first, not catalogue-first</b> — we lead with who she is and the look she wants, never a grid of SKUs.</li>
+      <li><b>Repeat by nature</b> — skincare replenishes and routines evolve, so relevance compounds straight into retention.</li>
+      <li><b>Content is the funnel</b> — beauty is discovered through video; rang makes UGC the proof, not an afterthought.</li>
+    </ul>
+  </section>
+
+  <!-- ROADMAP -->
+  <section>
+    <span class="eyebrow">What's next</span>
+    <h2>If this were funded tomorrow</h2>
+    <div class="grid g3">
+      <div class="card"><h4>Phase 1 — Nail the vibe</h4><p>One vibe engine, two worlds (skin + makeup), curated edits that genuinely feel personal. Win on relevance, not range.</p></div>
+      <div class="card"><h4>Phase 2 — Own the routine</h4><p>Ship rang. AI as a true routine-builder with replenishment nudges — so we own usage, not just the first purchase.</p></div>
+      <div class="card"><h4>Phase 3 — Open the loop</h4><p>A creator/UGC layer and brand collaborations that turn "people like you" into a living, two-sided engine.</p></div>
+    </div>
+  </section>
+
+  <!-- REFLECTION -->
+  <section>
+    <span class="eyebrow">Why I built this</span>
+    <h2>What it shows about how I work</h2>
+    <p>I didn't start rang from a category map or a competitor teardown. I started from a feeling everyone who loves beauty knows — <em>standing in front of infinite choice with no idea what's for you.</em> Then I worked backwards: what would make a person feel known in seconds, trust what she's shown, and shop with confidence — and built the product as the answer to those three.</p>
+    <p class="muted">That's how I think about product: find the precise human moment where someone stalls, and design the specific thing that gets them moving. The thesis, the ICP, the vibe-matching model, the full magazine-to-checkout flow, and a high-fidelity clickable prototype — I took all of it end to end myself, to make the belief real enough to feel, not just describe.</p>
+  </section>
+
+  <!-- CTA -->
+  <section style="text-align:center; border-bottom:none">
+    <h2>See it for yourself</h2>
+    <p class="muted" style="max-width:480px; margin:0 auto 26px">The full experience is a tappable, phone-native demo — best opened on a phone.</p>
+    <a class="cta" href="rang-share.html">Open the rang prototype →</a>
+  </section>
+
+  <footer class="foot">
+    <div class="logo">rang<span class="dot">.</span></div>
+    find your rang.<br>
+    Product concept &amp; prototype · 2026
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#17100F">
+<meta name="description" content="chozen. — choose your ritual. Beauty & self-care, curated to you.">
+<title>chozen. — choose your ritual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+:root{
+  --bg:#17100F; --bg2:#1F1613; --card:#241A17; --card2:#2C211D;
+  --gold:#D8B486; --gold2:#ECCFA6; --rose:#E0AE9E;
+  --text:#F3E6DD; --muted:rgba(243,230,221,.52); --faint:rgba(243,230,221,.30);
+  --line:rgba(216,180,134,.16); --line2:rgba(216,180,134,.30);
+}
+html,body{height:100%;}
+body{ background:radial-gradient(120% 80% at 50% 0%, #241715 0%, #120C0B 70%, #0C0807 100%);
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  font-family:'DM Sans',-apple-system,'Helvetica Neue',sans-serif; overflow:hidden; color:var(--text); }
+.phone{ width:390px; height:844px; position:relative; overflow:hidden; border-radius:52px; background:var(--bg);
+  box-shadow:0 0 0 1px rgba(216,180,134,.10), 0 0 0 11px #0d0807, 0 0 0 12px rgba(216,180,134,.06), 0 50px 130px rgba(0,0,0,.85); }
+/* premium texture: film grain + edge vignette over everything (non-blocking) */
+.phone::after{ content:''; position:absolute; inset:0; z-index:599; pointer-events:none; border-radius:inherit;
+  background:radial-gradient(125% 100% at 50% 38%, transparent 56%, rgba(8,4,3,.42) 100%); }
+.phone::before{ content:''; position:absolute; inset:0; z-index:600; pointer-events:none; border-radius:inherit; opacity:.05; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size:140px; }
+/* fill the whole screen on real phones */
+@media (max-width:440px){
+  body{ background:var(--bg); }
+  .phone{ width:100vw; height:100vh; height:100dvh; border-radius:0; box-shadow:none; }
+}
+.screen{ position:absolute; inset:0; display:none; flex-direction:column; background:var(--bg); }
+.screen.active{ display:flex; animation:scrn .52s cubic-bezier(.22,.61,.36,1) both; }
+@keyframes scrn{ from{opacity:0; transform:translateY(12px) scale(.99);} to{opacity:1; transform:none;} }
+/* staggered entrance for list content */
+@keyframes rise{ from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:none;} }
+.list-body > .prov, .list-body > .svc-row, .pp-body > *{ animation:rise .5s cubic-bezier(.22,.61,.36,1) both; }
+.list-body > .prov:nth-of-type(1){animation-delay:.04s} .list-body > .prov:nth-of-type(2){animation-delay:.1s} .list-body > .prov:nth-of-type(3){animation-delay:.16s} .list-body > .prov:nth-of-type(4){animation-delay:.22s}
+.list-body > .svc-row:nth-of-type(1){animation-delay:.03s} .list-body > .svc-row:nth-of-type(2){animation-delay:.07s} .list-body > .svc-row:nth-of-type(3){animation-delay:.11s} .list-body > .svc-row:nth-of-type(4){animation-delay:.15s} .list-body > .svc-row:nth-of-type(5){animation-delay:.19s} .list-body > .svc-row:nth-of-type(6){animation-delay:.23s} .list-body > .svc-row:nth-of-type(7){animation-delay:.27s} .list-body > .svc-row:nth-of-type(8){animation-delay:.31s}
+.sbar{ position:absolute; top:0; left:0; right:0; height:50px; z-index:500;
+  display:flex; align-items:center; justify-content:space-between; padding:16px 28px 0; pointer-events:none; }
+.sbar-time{ font-size:14px; font-weight:600; } .sbar-icons{ font-size:11px; color:var(--muted); letter-spacing:.04em; }
+.body{ flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; } .body::-webkit-scrollbar{ display:none; }
+.btn{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:17px; border:none; border-radius:18px; cursor:pointer;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; letter-spacing:.01em;
+  background:linear-gradient(120deg,var(--gold) 0%,var(--gold2) 100%); color:#2A1B12; box-shadow:0 12px 32px rgba(216,180,134,.22); transition:transform .15s; }
+.btn:active{ transform:scale(.975); } .btn:disabled{ opacity:.32; box-shadow:none; }
+.eyebrow{ font-size:10.5px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); }
+.q-foot{ position:absolute; bottom:0; left:0; right:0; padding:18px 28px calc(18px + env(safe-area-inset-bottom)); background:linear-gradient(to top,var(--bg) 62%,transparent); z-index:50;}
+
+/* art */
+.art-warm{ background:linear-gradient(150deg,#D9A988,#A6705A 60%,#6E4540); }
+.art-rose{ background:linear-gradient(150deg,#E6B5A8,#B97D70 60%,#7C4E4A); }
+.art-honey{ background:linear-gradient(150deg,#E6C79A,#B98E5E 55%,#76502F); }
+.art-mauve{ background:linear-gradient(150deg,#C99FAE,#8E6173 60%,#573B47); }
+.art-glow{ background:linear-gradient(150deg,#EBD3B0,#C99E72 55%,#7A5538); }
+.art-plum{ background:linear-gradient(150deg,#D7A6B0,#9A6478 58%,#5A3B49); }
+.svc-facts{ display:flex; flex-wrap:wrap; gap:8px; margin:-6px 0 18px; }
+.svc-fact{ font-size:11.5px; color:var(--muted); background:var(--card); border:1px solid var(--line); padding:6px 11px; border-radius:30px; }
+.svc-fact b{ color:var(--text); font-weight:500; }
+.consult-chip{ display:inline-flex; gap:6px; font-size:12px; color:var(--gold2); background:rgba(216,180,134,.1); border:1px solid var(--line2); padding:7px 12px; border-radius:30px; margin-bottom:16px; }
+.pay-sub{ font-size:11px; color:var(--muted); font-weight:400; }
+.pay-box{ margin-top:24px; padding:18px; border-radius:18px; background:var(--card2); border:1px solid var(--line2); }
+.pay-l{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.pay-chips{ display:flex; gap:8px; margin-bottom:16px; }
+.pay-chip{ flex:1; text-align:center; padding:10px 0; border-radius:13px; font-size:13px; cursor:pointer; border:1px solid var(--line); background:var(--card); color:var(--muted); }
+.pay-chip.on{ border-color:transparent; background:linear-gradient(120deg,var(--gold),var(--gold2)); color:#2A1B12; font-weight:600; }
+.pay-chip small{ display:block; font-size:9px; margin-top:2px; opacity:.8; }
+.pay-main{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+.pay-amt{ font-family:'Fraunces',serif; font-size:30px; color:var(--gold2); }
+.pay-note{ font-size:13px; color:var(--muted); }
+.pay-save{ font-size:11px; color:#7BD8A0; background:rgba(123,216,160,.12); padding:3px 9px; border-radius:20px; }
+.pay-total{ font-size:12.5px; color:var(--muted); margin-top:10px; }
+.pcard{ flex-shrink:0; width:152px; background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; cursor:pointer; transition:transform .15s; }
+.pcard:active{ transform:scale(.97); }
+.pcard-art{ height:96px; position:relative; }
+.pcard-rank{ position:absolute; top:8px; left:8px; z-index:2; font-size:10px; font-weight:700; color:#2A1B12; background:var(--gold2); padding:3px 8px; border-radius:20px; }
+.pcard-i{ padding:11px 13px 13px; }
+.pcard-n{ font-size:14px; font-weight:600; line-height:1.2; }
+.pcard-p{ font-size:12.5px; margin-top:7px; } .pcard-p b{ font-family:'Fraunces',serif; color:var(--gold2); font-size:15px; }
+.pcard-l{ font-size:11px; color:var(--muted); margin-top:3px; }
+.before{ filter:saturate(.55) brightness(.82) contrast(.9); }
+.after{ position:relative; } .after::after{ content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 38%,rgba(255,240,225,.28),transparent 60%); }
+.ba-tag{ position:absolute; top:8px; left:8px; font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:rgba(15,9,8,.5); padding:3px 7px; border-radius:20px; z-index:2;}
+/* faux video */
+.vid{ position:absolute; inset:0; overflow:hidden; }
+.vid .frame{ position:absolute; inset:-6%; animation:kb 9s ease-in-out infinite alternate; }
+@keyframes kb{ from{transform:scale(1.05) translate(0,0);} to{transform:scale(1.2) translate(-2%,-3%);} }
+.vid::before{ content:''; position:absolute; top:0; bottom:0; width:40%; left:-50%; background:linear-gradient(100deg,transparent,rgba(255,245,232,.16),transparent); animation:sweep 4.5s ease-in-out infinite; }
+@keyframes sweep{ 0%{left:-50%;} 60%,100%{left:130%;} }
+
+/* ════ S1 SPLASH ════ */
+#s1{ justify-content:flex-end; overflow:hidden; }
+.collage{ position:absolute; inset:0; z-index:1; }
+.cut{ position:absolute; border-radius:20px; overflow:hidden; box-shadow:0 16px 40px rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.06); animation:float 7s ease-in-out infinite; }
+.cut .lab{ position:absolute; bottom:8px; left:10px; font-size:11px; font-weight:600; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.6); }
+@keyframes float{ 0%,100%{transform:translateY(0) rotate(var(--r));} 50%{transform:translateY(-14px) rotate(var(--r));} }
+.c1{ width:138px;height:178px; top:64px; left:24px; --r:-5deg; animation-delay:0s;}
+.c2{ width:120px;height:150px; top:108px; right:22px; --r:5deg; animation-delay:.8s;}
+.c3{ width:128px;height:128px; top:268px; left:40px; --r:4deg; animation-delay:1.6s;}
+.c4{ width:142px;height:182px; top:250px; right:18px; --r:-4deg; animation-delay:.4s;}
+.c5{ width:120px;height:138px; top:430px; left:30px; --r:-6deg; animation-delay:1.2s;}
+.s1-grain{ position:absolute; inset:0; z-index:2; background:linear-gradient(to top,var(--bg) 18%, rgba(23,16,15,.35) 55%, rgba(23,16,15,.55) 100%); }
+.s1-inner{ position:relative; z-index:5; padding:0 32px 60px; }
+.s1-logo{ font-family:'Fraunces',serif; font-size:36px; font-weight:600; letter-spacing:-1.5px; color:var(--gold2); }
+.s1-logo .dot{ color:var(--rose); }
+.s1-head{ font-family:'Fraunces',serif; font-size:42px; font-weight:600; letter-spacing:-1px; line-height:1.05; margin-top:12px; }
+.s1-head i{ font-style:italic; color:var(--gold2); font-weight:500; }
+.s1-sub{ font-size:14.5px; color:var(--muted); margin-top:12px; }
+.s1-cta{ margin-top:26px; }
+
+/* ════ S2 SWIPE ════ */
+.welcome{ position:absolute; inset:0; z-index:300; background:radial-gradient(120% 90% at 50% 30%,#2A1B16,#120C0B);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 40px; transition:opacity .8s ease, visibility .8s; }
+.welcome.hide{ opacity:0; visibility:hidden; }
+.welcome .w-logo{ font-family:'Fraunces',serif; font-size:30px; color:var(--gold2); opacity:0; animation:wIn .8s ease .1s both;}
+.welcome .w1{ font-family:'Fraunces',serif; font-size:40px; font-weight:600; letter-spacing:-1px; margin-top:18px; opacity:0; animation:wIn .9s ease .5s both; }
+.welcome .w2{ font-family:'Fraunces',serif; font-style:italic; font-size:40px; font-weight:500; color:var(--gold2); opacity:0; animation:wIn .9s ease 1.1s both; }
+@keyframes wIn{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;} }
+.s2-top{ padding:60px 26px 4px; display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.s2-title{ font-family:'Fraunces',serif; font-size:21px; font-weight:500; letter-spacing:-.2px; line-height:1.15; }
+.s2-count{ font-size:12px; color:var(--gold2); font-weight:600; white-space:nowrap; }
+.deck-wrap{ flex:1; position:relative; margin:14px 24px 10px; }
+.swcard{ position:absolute; inset:0; border-radius:26px; overflow:hidden; background:var(--card); border:1px solid var(--line); box-shadow:0 24px 60px rgba(0,0,0,.5); will-change:transform; touch-action:none; }
+.deck-wrap{ touch-action:none; }
+.sw-shade{ position:absolute; inset:0; background:linear-gradient(to top,rgba(12,8,7,.95) 0%,rgba(12,8,7,.12) 46%,transparent 70%); z-index:2;}
+.sw-chip{ position:absolute; top:14px; left:14px; z-index:4; font-size:11px; font-weight:600; color:var(--gold2); background:rgba(15,9,8,.5); padding:6px 12px; border-radius:30px; backdrop-filter:blur(6px);}
+.sw-info{ position:absolute; left:20px; right:20px; bottom:22px; z-index:4; }
+.sw-plain{ font-family:'Fraunces',serif; font-size:27px; font-weight:600; line-height:1.12; letter-spacing:-.3px; }
+.sw-tech{ font-size:12px; color:var(--gold2); margin-top:7px; }
+.sw-line{ font-size:13px; color:rgba(243,230,221,.75); margin-top:7px; line-height:1.4; }
+.sw-love{ position:absolute; top:46%; left:50%; transform:translate(-50%,-50%) scale(.7); z-index:6; opacity:0; text-align:center; pointer-events:none; }
+.sw-love-pill{ display:inline-block; padding:12px 22px; border-radius:40px; font-family:'Fraunces',serif; font-size:20px; font-weight:600; color:#2A1B12;
+  background:linear-gradient(120deg,var(--gold),var(--gold2)); box-shadow:0 0 40px rgba(236,207,166,.7); }
+.sw-skip{ position:absolute; top:46%; left:50%; transform:translate(-50%,-50%) scale(.8); z-index:6; opacity:0; pointer-events:none;
+  font-family:'Fraunces',serif; font-size:30px; font-weight:700; color:#E08A7B; border:3px solid #E08A7B; border-radius:14px; padding:6px 18px; }
+.sw-spark{ position:absolute; inset:0; z-index:5; pointer-events:none; opacity:0; }
+.sw-hint{ text-align:center; font-size:12.5px; color:var(--muted); padding:0 28px calc(20px + env(safe-area-inset-bottom)); }
+.sw-hint b{ color:var(--gold2); }
+
+/* ════ S3 HOME ════ */
+.curtain{ position:absolute; inset:0; z-index:300; background:radial-gradient(120% 90% at 50% 35%,#2A1B16,#120C0B);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; transition:opacity .6s; }
+.curtain.hide{ opacity:0; visibility:hidden; }
+.cur-ring{ width:54px;height:54px; border-radius:50%; border:2.5px solid rgba(216,180,134,.2); border-top-color:var(--gold2); animation:spin 1s linear infinite; }
+@keyframes spin{ to{transform:rotate(360deg);} }
+.cur-t{ font-family:'Fraunces',serif; font-style:italic; font-size:21px; margin-top:22px; }
+.h-bar{ position:absolute; top:0; left:0; right:0; z-index:200; height:92px; padding:52px 22px 0; display:flex; align-items:center; gap:14px; background:linear-gradient(to bottom,var(--bg) 55%,transparent); }
+.h-ham{ width:34px;height:34px; display:flex; flex-direction:column; gap:4px; align-items:center; justify-content:center; cursor:pointer; }
+.h-ham span{ width:18px; height:1.6px; background:var(--text); border-radius:2px; }
+.h-loc{ flex:1; font-size:14px; cursor:pointer; } .h-loc small{ display:block; font-size:10px; color:var(--gold); letter-spacing:.1em; text-transform:uppercase; } .h-loc b{ font-weight:600; }
+.h-ava{ width:36px;height:36px; border-radius:50%; }
+.h-body{ padding:96px 0 40px; }
+.h-head{ padding:0 26px; }
+.h-h1{ font-family:'Fraunces',serif; font-size:30px; font-weight:600; letter-spacing:-.5px; }
+.h-h1 i{ font-style:italic; color:var(--gold2); }
+.wish{ margin:16px 26px 0; padding:15px 18px; border-radius:16px; cursor:pointer; background:linear-gradient(120deg,var(--card2),var(--card)); border:1px solid var(--line2); display:flex; align-items:center; gap:12px; }
+.wish-star{ font-size:17px; color:var(--gold2); } .wish-txt{ flex:1; font-size:14.5px; color:var(--muted); }
+.h-sec-t{ font-family:'Fraunces',serif; font-size:18px; font-weight:500; padding:0 26px; margin:26px 0 12px; }
+.h-sec-t small{ display:block; font-size:12px; color:var(--muted); font-family:'DM Sans'; margin-top:2px; font-weight:400;}
+.cuts{ display:flex; gap:12px; overflow-x:auto; padding:0 26px 4px; } .cuts::-webkit-scrollbar{ display:none; }
+.cutcat{ flex-shrink:0; width:100px; height:132px; border-radius:18px; overflow:hidden; position:relative; cursor:pointer; border:1px solid var(--line); }
+.cutcat .frame{ position:absolute; inset:-6%; animation:kb 10s ease-in-out infinite alternate; }
+.cutcat .lab{ position:absolute; bottom:0; left:0; right:0; padding:22px 12px 11px; z-index:2; background:linear-gradient(to top,rgba(12,8,7,.92),transparent); font-size:14px; font-weight:600; }
+.cutcat .em{ position:absolute; top:9px; left:11px; z-index:2; font-size:17px; }
+.reels{ display:flex; gap:12px; overflow-x:auto; padding:0 26px 4px; } .reels::-webkit-scrollbar{ display:none; }
+.reel{ flex-shrink:0; width:148px; height:228px; border-radius:20px; overflow:hidden; position:relative; cursor:pointer; border:1px solid var(--line); }
+.reel .sh{ position:absolute; inset:0; z-index:2; background:linear-gradient(to top,rgba(12,8,7,.9),transparent 55%); }
+.reel-h{ position:absolute; bottom:34px; left:12px; right:12px; z-index:3; font-size:12px; color:var(--gold2); font-weight:600; }
+.reel-c{ position:absolute; bottom:13px; left:12px; right:12px; z-index:3; font-size:12px; line-height:1.3; }
+.reel-tag{ position:absolute; top:11px; right:11px; z-index:3; font-size:10px; color:#fff; background:rgba(15,9,8,.45); padding:3px 8px; border-radius:20px; }
+
+/* AI try-on teaser (blended, not boxy) */
+.tryon{ margin:30px 0 0; padding:30px 26px 34px; position:relative; overflow:hidden; text-align:center;
+  background:radial-gradient(130% 100% at 50% 0%, rgba(224,174,158,.18), transparent 60%); }
+.tryon::before{ content:''; position:absolute; inset:0; background:radial-gradient(60% 50% at 80% 90%, rgba(216,180,134,.14), transparent 70%); }
+.tryon-eye{ position:relative; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); font-weight:700; }
+.tryon-t{ position:relative; font-family:'Fraunces',serif; font-size:27px; font-weight:600; line-height:1.18; margin-top:10px; }
+.tryon-t i{ font-style:italic; color:var(--gold2); }
+.tryon-s{ position:relative; font-size:13.5px; color:var(--muted); margin-top:10px; max-width:280px; margin-left:auto; margin-right:auto; line-height:1.5; }
+.tryon-b{ position:relative; margin-top:20px; display:inline-flex; align-items:center; gap:9px; padding:14px 26px; border-radius:40px; cursor:pointer;
+  font-size:14.5px; font-weight:600; color:#2A1B12; background:linear-gradient(120deg,var(--gold),var(--gold2)); box-shadow:0 14px 36px rgba(216,180,134,.3); }
+
+.consult{ margin:24px 26px 0; padding:20px; border-radius:22px; position:relative; overflow:hidden; background:linear-gradient(120deg,#2E1F19,#241A17); border:1px solid var(--line2); }
+.consult-t{ font-family:'Fraunces',serif; font-size:20px; font-weight:600; }
+.consult-s{ font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5; max-width:240px; }
+.consult-b{ margin-top:16px; display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:14px; cursor:pointer; background:var(--gold2); color:#2A1B12; font-size:13.5px; font-weight:600; }
+.verified{ color:var(--gold2); }
+
+/* ════ shared list screens ════ */
+.tbar{ position:absolute; top:0; left:0; right:0; z-index:250; height:96px; display:flex; align-items:flex-end; padding:0 20px 12px; gap:14px; background:linear-gradient(to bottom,rgba(15,9,8,.9) 30%,transparent); }
+.back{ width:40px;height:40px; border-radius:50%; background:rgba(15,9,8,.4); backdrop-filter:blur(8px); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; flex-shrink:0;}
+.tbar-title{ font-size:15px; font-weight:600; line-height:1.1;} .tbar-title small{ display:block; font-size:11px; color:var(--muted); font-weight:400;}
+.list-body{ padding:108px 26px 40px; }
+.list-intro{ font-size:13px; color:var(--muted); margin-bottom:16px; line-height:1.5;}
+
+/* service row (category → services) */
+.svc-row{ display:flex; gap:14px; align-items:center; padding:12px; border-radius:18px; background:var(--card); border:1px solid var(--line); margin-bottom:12px; cursor:pointer; transition:transform .15s;}
+.svc-row:active{ transform:scale(.985); }
+.svc-thumb{ width:74px;height:74px; border-radius:14px; flex-shrink:0; position:relative; overflow:hidden;}
+.svc-c-t{ font-size:16px; font-weight:600; } .svc-c-d{ font-size:12.5px; color:var(--muted); margin-top:3px; line-height:1.4; }
+.svc-c-tag{ font-size:12px; color:var(--gold2); margin-top:6px; }
+.svc-go{ margin-left:auto; color:var(--gold2); font-size:20px; align-self:center; }
+
+/* provider card (service → providers) */
+.prov{ background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden; cursor:pointer; margin-bottom:14px; transition:transform .15s;}
+.prov:active{ transform:scale(.99); }
+.prov-ba{ height:128px; display:flex; } .prov-ba > div{ flex:1; position:relative; }
+.prov-info{ padding:14px 16px 16px; }
+.prov-rowt{ display:flex; align-items:center; justify-content:space-between; }
+.prov-name{ font-size:16px; font-weight:600; display:flex; align-items:center; gap:6px; }
+.prov-rate{ font-size:13px; color:var(--gold2); font-weight:600; }
+.prov-sub{ font-size:12.5px; color:var(--muted); margin-top:4px; }
+.prov-foot{ display:flex; align-items:center; justify-content:space-between; margin-top:11px; }
+.prov-price{ font-size:13px; } .prov-price b{ font-family:'Fraunces',serif; color:var(--gold2); font-size:16px; }
+.prov-go{ font-size:13px; color:var(--gold2); font-weight:600; }
+.prov-kind{ font-size:11px; color:var(--gold); letter-spacing:.04em; }
+
+/* ════ S4 PROFILE ════ */
+.pp-hero{ height:300px; position:relative; }
+.pp-gallery{ display:flex; height:100%; } .pp-gallery > div{ flex:1; position:relative; }
+.pp-grad{ position:absolute; inset:0; pointer-events:none; z-index:4; background:linear-gradient(to top,var(--bg) 2%,transparent 45%); }
+/* real draggable before/after slider */
+.ba-slider{ position:absolute; inset:0; overflow:hidden; touch-action:none; cursor:ew-resize; --p:50%; }
+.ba-layer{ position:absolute; inset:0; background-size:cover; background-position:center; }
+.ba-layer.before{ clip-path:inset(0 calc(100% - var(--p)) 0 0); z-index:2; }
+.ba-slider .ba-tag{ z-index:5; }
+.ba-tag-r{ left:auto; right:10px; }
+.ba-divide{ position:absolute; top:0; bottom:0; left:var(--p); width:2px; margin-left:-1px; background:rgba(255,255,255,.9); z-index:6; box-shadow:0 0 12px rgba(0,0,0,.4); }
+.ba-knob{ position:absolute; top:42%; left:var(--p); transform:translateY(-50%); margin-left:-19px; z-index:7; width:38px; height:38px; border-radius:50%;
+  background:rgba(20,13,11,.55); backdrop-filter:blur(8px); border:1.5px solid rgba(255,255,255,.85); display:flex; align-items:center; justify-content:center; color:#fff; font-size:15px; }
+.ba-hint{ position:absolute; bottom:54px; left:50%; transform:translateX(-50%); z-index:6; font-size:11px; color:rgba(255,255,255,.75); background:rgba(8,5,4,.4); backdrop-filter:blur(6px); padding:5px 12px; border-radius:20px; pointer-events:none; animation:bhint 2.4s ease-in-out 1; }
+@keyframes bhint{ 0%,100%{opacity:.45;} 50%{opacity:1;} }
+.pp-body{ padding:0 28px 130px; margin-top:-40px; position:relative; z-index:5;}
+.pp-name{ font-family:'Fraunces',serif; font-size:30px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.pp-spec{ font-size:14px; color:var(--muted); margin-top:4px; }
+.pp-stats{ display:flex; gap:10px; margin-top:20px; }
+.pp-stat{ flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 10px; text-align:center; }
+.pp-stat-v{ font-family:'Fraunces',serif; font-size:19px; color:var(--gold2); } .pp-stat-l{ font-size:10.5px; color:var(--muted); margin-top:3px; }
+.pp-h{ font-family:'Fraunces',serif; font-size:18px; font-weight:500; margin:26px 0 12px; }
+.trust-row{ display:flex; flex-wrap:wrap; gap:8px; }
+.trust-chip{ font-size:12px; padding:8px 13px; border-radius:30px; background:var(--card); border:1px solid var(--line); }
+.work-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.work-cell{ aspect-ratio:1; border-radius:14px; position:relative; overflow:hidden; }
+.price-line{ margin-top:24px; padding:16px 18px; border-radius:18px; background:var(--card2); border:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:14px;}
+.price-line .pl-l{ font-size:12.5px; color:var(--muted); } .price-line .pl-v{ font-family:'Fraunces',serif; font-size:22px; color:var(--gold2); }
+
+/* ════ S5 BOOKING ════ */
+.bk{ padding:108px 28px 130px; }
+.bk-summary{ display:flex; gap:14px; padding:14px; border-radius:18px; background:var(--card); border:1px solid var(--line); align-items:center; }
+.bk-thumb{ width:54px;height:54px; border-radius:12px; flex-shrink:0; }
+.bk-sum-t{ font-size:15px; font-weight:600; } .bk-sum-s{ font-size:12.5px; color:var(--muted); margin-top:2px; }
+.bk-h{ font-family:'Fraunces',serif; font-size:17px; font-weight:500; margin:26px 0 12px; }
+.days{ display:flex; gap:9px; overflow-x:auto; padding-bottom:4px; } .days::-webkit-scrollbar{display:none;}
+.day{ flex-shrink:0; width:58px; padding:12px 0; text-align:center; border-radius:15px; cursor:pointer; border:1.5px solid var(--line); background:var(--card); }
+.day.on{ border-color:var(--gold2); background:var(--card2); }
+.day-d{ font-size:11px; color:var(--muted); } .day-n{ font-family:'Fraunces',serif; font-size:20px; margin-top:3px; } .day.on .day-n{ color:var(--gold2); }
+.slots{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+.slot{ padding:13px 0; text-align:center; border-radius:14px; cursor:pointer; font-size:14px; border:1.5px solid var(--line); background:var(--card); }
+.slot.on{ border-color:var(--gold2); background:var(--card2); color:var(--gold2); font-weight:600; }
+.login-note{ margin-top:24px; padding:14px 16px; border-radius:14px; background:var(--bg2); border:1px dashed var(--line2); font-size:12.5px; color:var(--muted); line-height:1.5; } .login-note b{ color:var(--text); }
+
+/* ════ S6 CONFIRM ════ */
+#s6{ justify-content:center; align-items:center; text-align:center; padding:0 36px; }
+.cf-check{ width:96px;height:96px; border-radius:50%; margin:0 auto; background:linear-gradient(120deg,var(--gold),var(--gold2)); display:flex; align-items:center; justify-content:center; font-size:46px; color:#2A1B12; box-shadow:0 18px 50px rgba(216,180,134,.32); animation:pop .6s cubic-bezier(.2,1.3,.4,1) both; }
+@keyframes pop{ 0%{transform:scale(.3);opacity:0;} 100%{transform:scale(1);opacity:1;} }
+.cf-t{ font-family:'Fraunces',serif; font-size:30px; font-weight:600; margin-top:28px; }
+.cf-s{ font-size:14px; color:var(--muted); margin-top:10px; line-height:1.55; }
+.cf-card{ width:100%; margin-top:28px; padding:20px; border-radius:20px; background:var(--card); border:1px solid var(--line); text-align:left; }
+.cf-row{ display:flex; justify-content:space-between; padding:9px 0; font-size:14px; gap:14px;} .cf-row + .cf-row{ border-top:1px solid var(--line); }
+.cf-row .k{ color:var(--muted); white-space:nowrap;} .cf-row .v{ font-weight:600; text-align:right;}
+.cf-cta{ width:100%; margin-top:24px; } .cf-link{ font-size:13px; color:var(--gold2); margin-top:14px; cursor:pointer; }
+
+/* ════ TRY-ON SCREEN ════ */
+#sTry{ background:#0c0807; }
+.try-cam{ position:absolute; inset:0; }
+.try-cam .frame{ position:absolute; inset:0; filter:brightness(.9); }
+.try-guide{ position:absolute; top:20%; left:50%; transform:translateX(-50%); width:200px; height:260px; border:2px dashed rgba(255,255,255,.35); border-radius:50%; }
+.try-note{ position:absolute; top:104px; left:0; right:0; text-align:center; font-size:11.5px; color:rgba(255,255,255,.5); z-index:3; }
+.try-applied{ position:absolute; top:140px; left:50%; transform:translateX(-50%); z-index:6; padding:8px 16px; border-radius:30px; font-size:13px; font-weight:600; color:#2A1B12; background:linear-gradient(120deg,var(--gold),var(--gold2)); box-shadow:0 0 30px rgba(236,207,166,.6); display:none; }
+.try-rail{ position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:6; display:flex; flex-direction:column; gap:12px; }
+.rail-i{ width:52px;height:52px; border-radius:16px; background:rgba(20,13,11,.55); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.12);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; transition:.2s; }
+.rail-i.on{ background:linear-gradient(120deg,var(--gold),var(--gold2)); border:none; }
+.rail-i .e{ font-size:18px; } .rail-i .l{ font-size:8px; color:#fff; } .rail-i.on .l{ color:#2A1B12; font-weight:700; }
+.try-sub{ position:absolute; left:0; right:0; bottom:150px; z-index:6; display:flex; gap:9px; overflow-x:auto; padding:0 20px 4px; }
+.try-sub::-webkit-scrollbar{ display:none; }
+.try-chip{ flex-shrink:0; padding:10px 15px; border-radius:30px; font-size:13px; white-space:nowrap; cursor:pointer; background:rgba(20,13,11,.6); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.14);}
+.try-chip.on{ background:var(--gold2); color:#2A1B12; font-weight:600; border:none;}
+.try-foot{ position:absolute; left:0; right:0; bottom:0; z-index:6; padding:16px 24px calc(20px + env(safe-area-inset-bottom)); background:linear-gradient(to top,rgba(8,5,4,.92),transparent);}
+.try-snap{ width:64px;height:64px; border-radius:50%; margin:0 auto; border:4px solid rgba(255,255,255,.85); background:rgba(255,255,255,.15); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:24px; }
+.try-snap.dim{ opacity:.4; pointer-events:none; }
+.try-gen{ position:absolute; inset:0; z-index:8; background:rgba(8,5,4,.6); backdrop-filter:blur(3px); display:none; flex-direction:column; align-items:center; justify-content:center; }
+.try-gen.on{ display:flex; } .try-gen .cur-t{ font-size:18px; }
+.try-result{ position:absolute; left:20px; right:20px; bottom:24px; z-index:9; padding:18px 20px; border-radius:22px; background:var(--bg2); border:1px solid var(--line2); display:none; }
+.try-result.on{ display:block; animation:fade .4s ease; }
+.try-r-t{ font-family:'Fraunces',serif; font-size:19px; font-weight:600; } .try-r-s{ font-size:13px; color:var(--muted); margin-top:6px; line-height:1.45;}
+.flash{ position:absolute; inset:0; z-index:20; background:#fff; opacity:0; pointer-events:none; }
+
+/* ════ CONSULT BOOKING ════ */
+.cons-hero{ padding:108px 28px 0; }
+.cons-t{ font-family:'Fraunces',serif; font-size:27px; font-weight:600; }
+.cons-s{ font-size:13.5px; color:var(--muted); margin-top:8px; line-height:1.55; }
+.cons-fee{ margin-top:18px; padding:16px 18px; border-radius:16px; background:var(--card2); border:1px solid var(--line2); display:flex; align-items:center; justify-content:space-between; }
+.cons-fee .v{ font-family:'Fraunces',serif; font-size:22px; color:var(--gold2); }
+
+/* ════ MY BOOKINGS ════ */
+.bkg-card{ padding:16px; border-radius:18px; background:var(--card); border:1px solid var(--line); margin-bottom:14px; display:flex; gap:14px; align-items:center;}
+.bkg-ic{ width:48px;height:48px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:22px; }
+.bkg-t{ font-size:15px; font-weight:600; } .bkg-s{ font-size:12.5px; color:var(--muted); margin-top:3px; }
+.bkg-when{ margin-left:auto; font-size:12px; color:var(--gold2); text-align:right; white-space:nowrap; }
+.empty{ text-align:center; color:var(--muted); font-size:14px; margin-top:80px; line-height:1.6;}
+
+/* ════ OVERLAYS ════ */
+.mask{ position:absolute; inset:0; z-index:350; background:rgba(8,5,4,.55); display:none; } .mask.on{ display:block; }
+.sheet{ position:absolute; left:0; right:0; bottom:0; z-index:360; background:var(--bg2); border-radius:30px 30px 0 0; border-top:1px solid var(--line2); transform:translateY(100%); transition:transform .35s cubic-bezier(.3,.9,.3,1); max-height:82%; display:flex; flex-direction:column; }
+.sheet.on{ transform:none; }
+.sheet-grip{ width:42px; height:4px; border-radius:4px; background:var(--line2); margin:12px auto 4px; }
+.sheet-body{ padding:8px 26px 30px; overflow-y:auto; } .sheet-body::-webkit-scrollbar{ display:none; }
+.sheet-t{ font-family:'Fraunces',serif; font-size:23px; font-weight:600; }
+.sheet-s{ font-size:13px; color:var(--muted); margin-top:6px; line-height:1.5; }
+.wish-input{ margin-top:14px; padding:14px 16px; border-radius:14px; background:var(--card); border:1px solid var(--line); font-size:14px; color:var(--faint); display:flex; align-items:center; gap:10px; }
+.wish-grp{ margin-top:16px; } .wish-grp-t{ font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:9px; }
+.wish-chip{ display:inline-block; margin:0 8px 8px 0; padding:9px 14px; border-radius:30px; background:var(--card); border:1px solid var(--line); font-size:13px; cursor:pointer; }
+.wish-chip:active{ background:var(--card2); }
+.ai-line{ font-size:14px; line-height:1.55; } .ai-line b{ color:var(--gold2); }
+.ai-card{ margin-top:12px; display:flex; align-items:center; gap:14px; padding:13px; border-radius:16px; background:var(--card); border:1px solid var(--line); cursor:pointer; }
+.ai-thumb{ width:50px;height:50px; border-radius:12px; flex-shrink:0; }
+.ai-c-t{ font-size:14.5px; font-weight:600; } .ai-c-s{ font-size:12px; color:var(--muted); margin-top:2px; } .ai-c-go{ margin-left:auto; color:var(--gold2); font-size:18px; }
+/* city picker rows */
+.city-row{ padding:15px 4px; font-size:15px; border-bottom:1px solid var(--line); cursor:pointer; display:flex; justify-content:space-between; }
+.city-row.on{ color:var(--gold2); font-weight:600; }
+/* hamburger drawer */
+.drawer{ position:absolute; top:0; bottom:0; left:0; width:78%; z-index:360; background:var(--bg2); border-right:1px solid var(--line2); transform:translateX(-100%); transition:transform .35s cubic-bezier(.3,.9,.3,1); padding:60px 26px 30px; overflow-y:auto;}
+.drawer.on{ transform:none; }
+.dr-logo{ font-family:'Fraunces',serif; font-size:30px; color:var(--gold2); } .dr-logo .dot{ color:var(--rose); }
+.dr-sec{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:26px 0 12px; }
+.dr-link{ padding:13px 0; font-size:16px; border-bottom:1px solid var(--line); cursor:pointer; display:flex; align-items:center; gap:12px;}
+.dr-link .e{ font-size:18px; width:24px; }
+
+/* reel fullscreen */
+.reelfs{ position:absolute; inset:0; z-index:380; display:none; touch-action:none; } .reelfs.on{ display:block; }
+.reelfs .rv{ position:absolute; inset:0; } .reelfs .rsh{ position:absolute; inset:0; background:linear-gradient(to top,rgba(8,5,4,.9) 8%,transparent 42%,rgba(8,5,4,.45)); }
+.rf-close{ position:absolute; top:54px; right:22px; z-index:7; width:38px;height:38px; border-radius:50%; background:rgba(8,5,4,.4); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; cursor:pointer; }
+.rf-handle{ position:absolute; top:56px; left:22px; z-index:7; font-size:14px; font-weight:600; color:#fff; }
+.rf-dots{ position:absolute; top:60px; left:50%; transform:translateX(-50%); z-index:7; display:flex; gap:5px; }
+.rf-dot{ width:6px;height:6px; border-radius:50%; background:rgba(255,255,255,.3);} .rf-dot.on{ background:#fff; }
+.rf-bottom{ position:absolute; left:24px; right:24px; bottom:40px; z-index:7; }
+.rf-cap{ font-size:15px; line-height:1.45; }
+.rf-up{ margin-top:16px; display:inline-flex; align-items:center; gap:8px; font-size:13px; color:var(--gold2); font-weight:600; cursor:pointer; }
+.rf-arrows{ font-size:11px; color:rgba(243,230,221,.5); margin-top:6px; }
+.rf-services{ position:absolute; left:0; right:0; bottom:0; z-index:9; background:var(--bg2); border-radius:28px 28px 0 0; border-top:1px solid var(--line2); transform:translateY(100%); transition:transform .35s cubic-bezier(.3,.9,.3,1); padding:8px 26px 30px;}
+.rf-services.on{ transform:none; }
+.rf-svc-t{ font-family:'Fraunces',serif; font-size:18px; font-weight:600; margin-top:6px;}
+.rf-svc-s{ font-size:12.5px; color:var(--muted); margin-top:4px; margin-bottom:14px;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="sbar"><div class="sbar-time">9:41</div><div class="sbar-icons">5G ▪ ▪ 100%</div></div>
+
+  <!-- S1 SPLASH -->
+  <div class="screen active" id="s1">
+    <div class="collage" id="collage"></div>
+    <div class="s1-grain"></div>
+    <div class="s1-inner">
+      <div class="s1-logo">chozen<span class="dot">.</span></div>
+      <div class="s1-head">Choose your <i>ritual.</i></div>
+      <div class="s1-sub">Beauty & self-care, curated to you.</div>
+      <button class="btn s1-cta" onclick="startSwipe()">Begin ✶</button>
+    </div>
+  </div>
+
+  <!-- S2 SWIPE -->
+  <div class="screen" id="s2">
+    <div class="welcome" id="welcome">
+      <div class="w-logo">chozen<span style="color:var(--rose)">.</span></div>
+      <div class="w1">chozen by you.</div>
+      <div class="w2">no one else.</div>
+    </div>
+    <div class="s2-top">
+      <div class="s2-title">Swipe what feels<br>like your ritual</div>
+      <div class="s2-count" id="swCount"></div>
+    </div>
+    <div class="deck-wrap" id="deck"></div>
+    <div class="sw-hint">Swipe <b>right</b> to add ✦ &nbsp;·&nbsp; <b>left</b> to skip</div>
+  </div>
+
+  <!-- S3 HOME -->
+  <div class="screen" id="s3">
+    <div class="curtain" id="curtain"><div class="cur-ring"></div><div class="cur-t">Curating your dream choices…</div></div>
+    <div class="h-bar">
+      <div class="h-ham" onclick="openDrawer()"><span></span><span></span><span></span></div>
+      <div class="h-loc" onclick="openCity()"><small>Location</small><b id="hLoc">Mumbai</b> ▾</div>
+      <div class="h-ava art-rose" onclick="openDrawer()" style="background-image:url('https://images.unsplash.com/photo-1554151228-14d9def656e4?w=200&q=80&auto=format&fit=crop');background-size:cover;background-position:center;"></div>
+    </div>
+    <div class="body"><div class="h-body" id="homeBody"></div></div>
+  </div>
+
+  <!-- SCAT category → services -->
+  <div class="screen" id="sCat">
+    <div class="tbar"><div class="back" onclick="go('s3')">←</div><div class="tbar-title" id="catTitle"></div></div>
+    <div class="body"><div class="list-body" id="catBody"></div></div>
+  </div>
+
+  <!-- SLIST service → providers -->
+  <div class="screen" id="sList">
+    <div class="tbar"><div class="back" id="listBack">←</div><div class="tbar-title" id="listTitle"></div></div>
+    <div class="body"><div class="list-body" id="listBody"></div></div>
+  </div>
+
+  <!-- S4 PROFILE -->
+  <div class="screen" id="s4">
+    <div class="tbar"><div class="back" id="ppBack">←</div><div class="tbar-title">Profile</div></div>
+    <div class="body">
+      <div class="pp-hero"><div class="pp-gallery" id="ppGallery"></div><div class="pp-grad"></div></div>
+      <div class="pp-body">
+        <div class="pp-name" id="ppName"></div>
+        <div class="pp-spec" id="ppSpec"></div>
+        <div class="pp-stats" id="ppStats"></div>
+        <div class="pp-h">Why she's trusted</div>
+        <div class="trust-row" id="ppTrust"></div>
+        <div class="pp-h">Recent work</div>
+        <div class="work-grid" id="ppWork"></div>
+        <div class="pay-box">
+          <div class="pay-l" id="ppPriceLabel"></div>
+          <div class="pay-chips" id="payChips"></div>
+          <div class="pay-main"><div class="pay-amt" id="payAmt"></div><div class="pay-note" id="payNote"></div></div>
+          <div class="pay-total" id="payTotal"></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-foot"><button class="btn" onclick="go('s5')">Book appointment</button></div>
+  </div>
+
+  <!-- S5 BOOKING -->
+  <div class="screen" id="s5">
+    <div class="tbar"><div class="back" onclick="go('s4')">←</div><div class="tbar-title">Book your slot</div></div>
+    <div class="body">
+      <div class="bk">
+        <div class="bk-summary"><div class="bk-thumb" id="bkThumb"></div>
+          <div><div class="bk-sum-t" id="bkService"></div><div class="bk-sum-s" id="bkArtist"></div></div></div>
+        <div class="bk-h">Pick a day</div><div class="days" id="bkDays"></div>
+        <div class="bk-h">Available times</div><div class="slots" id="bkSlots"></div>
+        <div class="login-note">📱 We'll confirm on <b>+91 •••• ••• 210</b> — you only log in to book. Discovery stays open.</div>
+      </div>
+    </div>
+    <div class="q-foot"><button class="btn" id="bkConfirm" onclick="confirmBooking()" disabled>Confirm booking</button></div>
+  </div>
+
+  <!-- S6 CONFIRM -->
+  <div class="screen" id="s6">
+    <div class="cf-check">✓</div>
+    <div class="cf-t" id="cfTitle">You're chozen.</div>
+    <div class="cf-s" id="cfSub"></div>
+    <div class="cf-card" id="cfCard"></div>
+    <button class="btn cf-cta" onclick="go('s3')">Back to home</button>
+    <div class="cf-link" onclick="openBookings()">View my bookings →</div>
+  </div>
+
+  <!-- STRY AI TRY-ON -->
+  <div class="screen" id="sTry">
+    <div class="try-cam"><div class="frame art-rose" style="background-image:url('https://images.unsplash.com/photo-1594465919760-441fe5908ab0?w=900&q=80&auto=format&fit=crop');background-size:cover;background-position:center;"></div></div>
+    <div class="try-guide"></div>
+    <div class="tbar" style="background:linear-gradient(to bottom,rgba(8,5,4,.7),transparent)"><div class="back" onclick="go('s3')">✕</div><div class="tbar-title">Try a ritual with AI</div></div>
+    <div class="try-note">Camera preview is simulated for this prototype</div>
+    <div class="try-applied" id="tryApplied"></div>
+    <div class="try-rail" id="tryRail"></div>
+    <div class="try-sub" id="trySub"></div>
+    <div class="try-foot"><div class="try-snap dim" id="trySnap" onclick="trySnapshot()">📸</div></div>
+    <div class="try-gen" id="tryGen"><div class="cur-ring"></div><div class="cur-t">Generating your look… stay still ✨</div></div>
+    <div class="try-result" id="tryResult">
+      <div class="try-r-t" id="tryRT"></div>
+      <div class="try-r-s">Looks lovely on you. This ritual is available near you in <span id="tryCity">Mumbai</span>.</div>
+      <button class="btn" style="margin-top:14px" id="tryGo">Give this ritual a try →</button>
+    </div>
+    <div class="flash" id="tryFlash"></div>
+  </div>
+
+  <!-- SCONS VIDEO CONSULT -->
+  <div class="screen" id="sCons">
+    <div class="tbar"><div class="back" onclick="go('s3')">←</div><div class="tbar-title">Video consultation</div></div>
+    <div class="body">
+      <div class="cons-hero">
+        <div class="cons-t">Talk it through, first</div>
+        <div class="cons-s">A 1:1 video call with a certified cosmetologist — get matched to the right ritual before you commit to anything.</div>
+        <div class="cons-fee"><div><div style="font-size:12px;color:var(--muted)">Consultation fee</div><div style="font-size:12px;color:var(--gold)">adjusted against your booking</div></div><div class="v">₹499</div></div>
+        <div class="bk-h">Pick a day</div><div class="days" id="csDays"></div>
+        <div class="bk-h">Available times</div><div class="slots" id="csSlots"></div>
+      </div>
+    </div>
+    <div class="q-foot"><button class="btn" id="csConfirm" onclick="confirmConsult()" disabled>Confirm consultation</button></div>
+  </div>
+
+  <!-- SBOOK MY BOOKINGS -->
+  <div class="screen" id="sBook">
+    <div class="tbar"><div class="back" onclick="go('s3')">←</div><div class="tbar-title">My bookings</div></div>
+    <div class="body"><div class="list-body" id="bookBody"></div></div>
+  </div>
+
+  <!-- OVERLAYS -->
+  <div class="mask" id="mask" onclick="closeAll()"></div>
+
+  <div class="sheet" id="wishSheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-body">
+      <div class="sheet-t">make a wish ✶</div>
+      <div class="sheet-s">Say it in your words — confused is okay.</div>
+      <div class="wish-input">🔍 <span>“glow for my wedding in 3 weeks”</span></div>
+      <div id="wishChips"></div>
+      <div id="wishRes" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <div class="sheet" id="citySheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-body"><div class="sheet-t">Your city</div><div id="cityList" style="margin-top:14px"></div></div>
+  </div>
+
+  <div class="drawer" id="drawer">
+    <div class="dr-logo">chozen<span class="dot">.</span></div>
+    <div class="dr-sec">Discover</div>
+    <div class="dr-link" onclick="closeAll();go('s3')"><span class="e">⌂</span> Home</div>
+    <div class="dr-link" onclick="closeAll();openTryon()"><span class="e">✨</span> Try a ritual with AI</div>
+    <div class="dr-link" onclick="closeAll();openBookings()"><span class="e">🗓</span> My bookings</div>
+    <div class="dr-link" onclick="closeAll();openConsult()"><span class="e">📹</span> Video consultation</div>
+    <div class="dr-sec">Browse rituals</div>
+    <div id="drawerCats"></div>
+    <div class="dr-sec">More</div>
+    <div class="dr-link"><span class="e">♡</span> Saved</div>
+    <div class="dr-link"><span class="e">?</span> Help & support</div>
+  </div>
+
+  <div class="reelfs" id="reelFs">
+    <div class="rv" id="rfVid"></div><div class="rsh"></div>
+    <div class="rf-close" onclick="closeReel()">✕</div>
+    <div class="rf-handle" id="rfHandle"></div>
+    <div class="rf-dots" id="rfDots"></div>
+    <div class="rf-bottom">
+      <div class="rf-cap" id="rfCap"></div>
+      <div class="rf-up" onclick="openReelServices()">↑ rituals used in this reel</div>
+      <div class="rf-arrows">swipe ← → for more · swipe ↑ for rituals</div>
+    </div>
+    <div class="rf-services" id="rfServices"></div>
+  </div>
+
+</div>
+
+<script>
+/* ───── data ───── */
+const AREA_META={
+  brows:{label:'Brows', emoji:'🤍', art:'art-honey'},
+  lashes:{label:'Lashes', emoji:'👁', art:'art-warm'},
+  lips:{label:'Lips', emoji:'💋', art:'art-rose'},
+  eyes:{label:'Eyes', emoji:'✨', art:'art-mauve'},
+  skin:{label:'Skin', emoji:'🌸', art:'art-glow'},
+  pmu:{label:'PMU', emoji:'✶', art:'art-plum'},
+};
+const AREAS=['brows','lashes','lips','eyes','skin','pmu'];
+
+/* taxonomy from Sonal's service table */
+function S(area,name,price,from,sessions,lasts,repeat,consult,short,blurb){ return {area,name,price,from,sessions,lasts,repeat,consult,short,blurb}; }
+const SERVICES={
+  /* BROWS */
+  browtint:S('brows','Brow Tinting','₹500–3,000','₹500',1,'3–6 weeks','8–12 times/year','No','Tinted, fuller-looking brows','A semi-permanent tint that darkens and fills sparse brows for a fuller look — no needles.'),
+  lamination:S('brows','Brow Lamination','₹2,000–8,000','₹2,000',1,'4–8 weeks','6–10 times/year','No','Lifted, brushed-up natural brows','Lifts and grooms your natural brows into a fuller, brushed-up shape. No pigment, no needles.'),
+  browshape:S('brows','Brow Shaping (Premium)','₹500–2,500','₹500',1,'3–6 weeks','Monthly','No','Clean, sculpted brow shape','Expert mapping, threading and grooming for a clean, sculpted brow shape.'),
+  microblading:S('brows','Microblading','₹12,000–35,000','₹12,000','1 + touch-up','12–24 months','Every 1–2 years','Usually No','Hair-like strokes, crisp & natural','Fine, hair-like strokes drawn by hand for crisp, natural-looking definition.'),
+  nanobrows:S('brows','Nano Brows','₹15,000–45,000','₹15,000','1 + touch-up','1–3 years','Every 1–3 years','Usually No','Ultra-fine digital hair strokes','Ultra-fine digital hair strokes — like microblading, but gentler and longer-lasting.'),
+  ombre:S('brows','Ombre Brows','₹15,000–40,000','₹15,000','1 + touch-up','1–3 years','Every 1–3 years','Usually No','Soft powder-fill, defined finish','A soft powder-fill for fuller brows — softer at the front, defined at the tail. No daily pencil.'),
+  powder:S('brows','Powder Brows','₹15,000–40,000','₹15,000','1 + touch-up','1–3 years','Every 1–3 years','Usually No','Misted, makeup-like shading','A misted, makeup-like shading for a soft, filled brow that looks like a light pencil all day.'),
+  combobrows:S('brows','Combination Brows','₹18,000–45,000','₹18,000','1 + touch-up','1–3 years','Every 1–3 years','Usually No','Strokes + shading, best of both','Hair strokes at the front plus soft shading through — the best of both techniques.'),
+  /* LASHES */
+  lashtint:S('lashes','Lash Tinting','₹1,000–4,000','₹1,000',1,'3–6 weeks','8–12 times/year','No','Darker, defined natural lashes','A gentle tint that darkens your natural lashes for definition without mascara.'),
+  lashlift:S('lashes','Lash Lift','₹2,000–6,000','₹2,000',1,'6–8 weeks','6–8 times/year','No','Your lashes, curled & lifted','Curls and lifts your own lashes from the root for a wide-awake, mascara-free look.'),
+  classiclash:S('lashes','Classic Lash Extensions','₹2,000–8,000','₹2,000',1,'3–5 weeks','8–12 times/year','No','One per lash, natural length','One extension per natural lash for a longer, defined but natural finish.'),
+  hybridlash:S('lashes','Hybrid Lash Extensions','₹3,000–10,000','₹3,000',1,'3–5 weeks','8–12 times/year','No','Mix of classic & volume','A mix of classic and volume lashes for a fuller, textured look.'),
+  volumelash:S('lashes','Volume Lash Extensions','₹4,000–15,000','₹4,000',1,'3–5 weeks','8–12 times/year','No','Fuller, fluttery volume','Multiple fine lashes per natural lash for soft, fluttery volume.'),
+  megalash:S('lashes','Mega Volume Extensions','₹6,000–20,000','₹6,000',1,'3–5 weeks','8–12 times/year','No','Maximum drama & density','Maximum density for a bold, dramatic lash line.'),
+  /* LIPS */
+  lipblush:S('lips','Lip Blush','₹15,000–40,000','₹15,000','1–2','2–5 years','Every 2–5 years','Usually No','Soft, natural tint that lasts','A semi-permanent tint that enhances your lips’ natural colour and shape — a soft, healthy flush.'),
+  lipneut:S('lips','Lip Neutralization','₹15,000–45,000','₹15,000','2–4','2–5 years','Every 2–5 years','Recommended','Evens out dark or dull lips','Corrects and neutralises pigmentation in darker lips before adding a fresh, even tone.'),
+  darklip:S('lips','Dark Lip Correction','₹15,000–45,000','₹15,000','2–4','2–5 years','Every 2–5 years','Recommended','Corrects naturally dark lips','A correction process that lightens and evens out naturally dark lips.'),
+  fulllip:S('lips','Full Lip Color Tattoo','₹20,000–50,000','₹20,000','1–2','2–5 years','Every 2–5 years','Usually No','Full, saturated lip colour','Full, saturated semi-permanent lip colour for a lasting made-up look.'),
+  liprefresh:S('lips','Lip Refresh / Touch-Up','₹5,000–15,000','₹5,000',1,'1–3 years','Every 1–2 years','No','Top up your existing tint','A top-up to refresh and revive your existing lip blush or tattoo.'),
+  /* EYES */
+  eyelinertop:S('eyes','Semi-Permanent Eyeliner (Top)','₹10,000–30,000','₹10,000','1–2','2–5 years','Every 2–5 years','Usually No','A clean line you wake up with','A smudge-proof, sweat-proof line along the top lash line that lasts for years.'),
+  eyelinerboth:S('eyes','Semi-Permanent Eyeliner (Top & Bottom)','₹15,000–40,000','₹15,000','1–2','2–5 years','Every 2–5 years','Usually No','Defined top & bottom line','Defined semi-permanent liner on both top and bottom lash lines.'),
+  lashline:S('eyes','Lash Line Enhancement','₹8,000–25,000','₹8,000','1–2','2–5 years','Every 2–5 years','Usually No','Subtle lash-line definition','A subtle pigment between the lashes for natural, fuller-looking definition.'),
+  wingedliner:S('eyes','Winged Permanent Eyeliner','₹15,000–45,000','₹15,000','1–2','2–5 years','Every 2–5 years','Usually No','A permanent winged flick','A permanent winged flick, drawn to suit your eye shape.'),
+  /* SKIN */
+  hydrafacial:S('skin','HydraFacial','₹2,000–8,000','₹2,000',1,'4–6 weeks','6–12 times/year','No','Instant glass-skin glow','A multi-step cleanse, exfoliate and hydrate for an instant glass-skin glow. Zero downtime.'),
+  deluxehydra:S('skin','Deluxe HydraFacial','₹5,000–15,000','₹5,000',1,'4–6 weeks','6–12 times/year','No','HydraFacial + boosters','HydraFacial with added boosters and treatments for deeper results.'),
+  oxygen:S('skin','Oxygen Facial','₹2,000–8,000','₹2,000',1,'2–6 weeks','Monthly','No','Plumping oxygen boost','Infuses the skin with oxygen and serums for an instant plump and glow.'),
+  glowfacial:S('skin','Glow Facial','₹1,500–6,000','₹1,500',1,'2–4 weeks','Monthly','No','Quick radiance refresh','A quick, radiance-boosting facial for an instant refresh.'),
+  brightening:S('skin','Brightening Facial','₹2,000–8,000','₹2,000',1,'2–6 weeks','Monthly','No','Targets dullness & tone','Targets dullness and uneven tone for a brighter complexion.'),
+  glassskin:S('skin','Korean Glass Skin Facial','₹3,000–15,000','₹3,000',1,'2–6 weeks','Monthly','No','Dewy glass-skin finish','A multi-layer Korean-inspired facial for a dewy, glass-skin finish.'),
+  medifacial:S('skin','Medi-Facial','₹3,000–12,000','₹3,000',1,'2–6 weeks','Monthly','No','Clinical, results-driven facial','A clinical, results-driven facial tailored to your skin concern.'),
+  led:S('skin','LED Light Therapy Facial','₹2,000–8,000','₹2,000','1–6','Varies','Monthly','No','Light therapy for clarity','Light therapy to calm, clear and rejuvenate the skin.'),
+  peelbasic:S('skin','Chemical Peel (Basic)','₹2,000–6,000','₹2,000','3–6','Several months','2–4 times/year','Recommended','Gentle resurfacing peel','A gentle resurfacing peel to refresh tone and texture.'),
+  peeladv:S('skin','Chemical Peel (Advanced)','₹5,000–15,000','₹5,000','3–6','Several months','2–4 times/year','Recommended','Deeper peel for texture & marks','A deeper peel to target pigmentation, marks and texture over a course.'),
+  carbon:S('skin','Carbon Facial','₹3,000–12,000','₹3,000','1–3','Several weeks','Every 2–3 months','Recommended','Laser glow & pore refining','A laser facial that refines pores and adds an instant glow.'),
+  bbglow:S('skin','BB Glow','₹3,000–15,000','₹3,000','3–5','3–12 months','1–2 cycles/year','Recommended','Semi-permanent foundation glow','A semi-permanent serum tint for an even, foundation-like glow.'),
+  bbglowblush:S('skin','BB Glow Blush','₹5,000–20,000','₹5,000','3–5','6–12 months','1–2 cycles/year','Recommended','BB glow with a flush','BB Glow with an added natural flush of colour.'),
+  /* PMU */
+  permblush:S('pmu','Permanent Blush (Cheeks)','₹10,000–60,000','₹10,000','1–2','2–5 years','Every 2–5 years','Recommended','A natural, always-on flush','A semi-permanent cheek tint for a natural, always-on flush.'),
+  freckle:S('pmu','Freckle Tattoo','₹8,000–30,000','₹8,000','1–2','1–3 years','Every 1–3 years','No','Soft, sun-kissed faux freckles','Soft, semi-permanent faux freckles for a sun-kissed look.'),
+  beautymark:S('pmu','Beauty Mark / Beauty Spot','₹2,000–10,000','₹2,000',1,'Several years','Rarely','No','A delicate beauty spot','A delicate, permanent beauty spot placed exactly where you want it.'),
+  scalp:S('pmu','Scalp Micropigmentation','₹20,000–80,000','₹20,000','2–4','Several years','Rarely','Recommended','Fills thinning or scarred areas','Tiny pigment dots that fill thinning or scarred areas of the scalp.'),
+};
+/* single representative mid-market price per service (₹) — replaces the range */
+const PRICE={ browtint:1500, lamination:4000, browshape:1200, microblading:18000, nanobrows:25000, ombre:22000, powder:22000, combobrows:28000,
+  lashtint:2000, lashlift:3500, classiclash:4000, hybridlash:6000, volumelash:8000, megalash:12000,
+  lipblush:22000, lipneut:28000, darklip:28000, fulllip:32000, liprefresh:8000,
+  eyelinertop:16000, eyelinerboth:24000, lashline:14000, wingedliner:22000,
+  hydrafacial:4000, deluxehydra:8000, oxygen:3500, glowfacial:3000, brightening:3500, glassskin:6000, medifacial:6000, led:4000,
+  peelbasic:3500, peeladv:8000, carbon:6000, bbglow:9000, bbglowblush:12000,
+  permblush:25000, freckle:15000, beautymark:5000, scalp:40000 };
+Object.keys(SERVICES).forEach(id=>{ const s=SERVICES[id]; s.art=AREA_META[s.area].art; s.range=s.price; s.price=PRICE[id]; });
+
+/* ───── real imagery (verified Unsplash) ───── */
+const U=id=>`https://images.unsplash.com/${id}?w=900&q=80&auto=format&fit=crop`;
+const IMG={
+  brows:['photo-1596697612480-e1b6615aec10','photo-1594465919760-441fe5908ab0'],
+  lashes:['photo-1589710751893-f9a6770ad71b','photo-1632765866070-3fadf25d3d5b'],
+  lips:['photo-1549153052-247abe00d6d9','photo-1596205521983-9c372fb3d4f1'],
+  eyes:['photo-1594465919760-441fe5908ab0','photo-1648249969490-44f3052a3721'],
+  skin:['photo-1581182815808-b6eb627a8798','photo-1596205521983-9c372fb3d4f1','photo-1554151228-14d9def656e4'],
+  pmu:['photo-1554151228-14d9def656e4','photo-1643379855542-82c0c7483f3a','photo-1596697612480-e1b6615aec10'],
+};
+const PORTRAITS=['photo-1607569708758-0270aa4651bd','photo-1582896911227-c966f6e7fb93','photo-1554151228-14d9def656e4'];
+const REELIMG=['photo-1632765866070-3fadf25d3d5b','photo-1648249969490-44f3052a3721','photo-1643379855542-82c0c7483f3a','photo-1594465919760-441fe5908ab0','photo-1596205521983-9c372fb3d4f1'];
+const SPLASHIMG=['photo-1596697612480-e1b6615aec10','photo-1589710751893-f9a6770ad71b','photo-1549153052-247abe00d6d9','photo-1581182815808-b6eb627a8798','photo-1594465919760-441fe5908ab0'];
+const BEFOREIMG='photo-1556942057-94aaf3ae5d6e';
+const FACEIMG='photo-1594465919760-441fe5908ab0';
+function bgi(id){ return `background-image:url('${U(id)}');background-size:cover;background-position:center;`; }
+function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return Math.abs(h); }
+function areaImg(area,i){ const a=IMG[area]||IMG.skin; return a[(i||0)%a.length]; }
+function svcImg(s){ const a=IMG[s.area]||IMG.skin; return a[hashStr(s.name)%a.length]; }
+
+function inr(n){ return '₹'+Number(n).toLocaleString('en-IN'); }
+/* anything above ₹2,500 is split; pricier rituals split over 6 */
+function defPlan(p){ return p<=2500?1:(p>=12000?6:3); }
+function perMonth(p,n){ return Math.round(p/n/10)*10; }
+function tagOf(s){ return `${payShort(s)} · ${s.lasts}`; }
+/* nominal price shown on cards = default (most attractive) plan */
+function payShort(s){ const n=defPlan(s.price);
+  if(n===1) return `<b>${inr(Math.round(s.price*0.95/10)*10)}</b><span class="pay-sub"> · pay once, 5% off</span>`;
+  return `<b>${inr(perMonth(s.price,n))}</b><span class="pay-sub">/mo × ${n}</span>`; }
+function planText(s,n){ if(n===1) return `${inr(Math.round(s.price*0.95/10)*10)} once (5% off)`; return `${inr(perMonth(s.price,n))}/mo × ${n} months`; }
+
+const SWIPE_IDS=['ombre','lashlift','lipblush','hydrafacial','eyelinertop','volumelash','glassskin','microblading','lipneut','permblush'];
+const SWIPE_COPY={
+  ombre:'Brows that frame your face', lashlift:'Lifted, wide-awake eyes', lipblush:'Your lips, but better',
+  hydrafacial:'That glass-skin glow', eyelinertop:'Effortless defined eyes', volumelash:'Full, fluttery lashes',
+  glassskin:'Korean glass-skin finish', microblading:'Crisp, natural brows', lipneut:'Even, balanced lip tone', permblush:'A natural flush, always on',
+};
+
+const PROVIDERS=[
+  {name:'Aanya Rao', kind:'PMU Artist', exp:'6 yrs', rate:'4.9', n:'320+', trust:['🎓 PMU certified','🧴 Single-use needles','💎 320+ done','📋 Patch-test first']},
+  {name:'Dr. Myra Kapoor', kind:'Dermatologist', exp:'8 yrs', rate:'4.8', n:'500+', trust:['🎓 MD Dermatology','🏥 Clinical-grade hygiene','💎 500+ clients','🔬 Sterile clinic']},
+  {name:'Zoya Sheikh', kind:'Cosmetologist', exp:'4 yrs', rate:'4.7', n:'210+', trust:['🎓 Certified cosmetologist','🧴 Fresh consumables','💎 210+ done','📋 Aftercare kit']},
+];
+
+const REELS=[
+  {handle:'@meher.glow', services:['hydrafacial','glassskin'], cap:'my 5-minute glass-skin reset ✨'},
+  {handle:'@riya.k', services:['ombre'], cap:'6 months in — ombre brows still perfect 🤍'},
+  {handle:'@itsnaina', services:['volumelash','lashlift'], cap:'volume lashes, zero mascara energy'},
+  {handle:'@soft.co', services:['lipblush','lipneut'], cap:'lip blush healed results 💋'},
+  {handle:'@theaesthete', services:['peelbasic'], cap:'cleared my texture in 3 sessions'},
+];
+
+const WISH=[
+  {g:'Search directly', q:'Lip blush near me', ids:['lipblush']},
+  {g:'Search directly', q:'Best brows in Mumbai', ids:['ombre','microblading']},
+  {g:'Got a concern?', q:'My brows look patchy', ids:['microblading','nanobrows']},
+  {g:'Got a concern?', q:'Dull, tired skin', ids:['hydrafacial','glassskin']},
+  {g:'Event coming up?', q:'Glow for my wedding in 3 weeks', ids:['glassskin','lipblush']},
+];
+
+const CITIES=['Mumbai','Delhi','Bengaluru','Hyderabad','Pune','Gurgaon'];
+
+/* ───── state ───── */
+const state={ liked:[], city:'Mumbai', service:null, provider:null, day:null, slot:null, listBack:'s3', ppBack:'sList', bookings:[], csDay:null, csSlot:null };
+
+/* ───── nav ───── */
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); const el=document.getElementById(id); el.classList.add('active'); el.querySelector('.body')?.scrollTo(0,0); }
+function go(id){ if(id==='s5') buildBooking(); show(id); }
+
+/* ───── S1 collage ───── */
+function buildCollage(){ const a=[['art-honey','Brows'],['art-warm','Lashes'],['art-rose','Lips'],['art-glow','Skin'],['art-mauve','Eyes']];
+  const cl=document.getElementById('collage'); a.forEach((x,i)=>{ const d=document.createElement('div'); d.className=`cut c${i+1} ${x[0]} after`; d.style.cssText=bgi(SPLASHIMG[i]); d.innerHTML=`<div class="lab">${x[1]}</div>`; cl.appendChild(d); }); }
+
+/* ───── S2 swipe ───── */
+let deckI=0;
+function startSwipe(){ deckI=0; state.liked=[]; show('s2'); const w=document.getElementById('welcome'); w.classList.remove('hide'); renderDeck(); updateCount(); setTimeout(()=>w.classList.add('hide'),2300); }
+function renderDeck(){
+  const wrap=document.getElementById('deck'); wrap.innerHTML='';
+  const top=Math.min(deckI+2, SWIPE_IDS.length-1);
+  for(let k=top;k>=deckI;k--){ const id=SWIPE_IDS[k]; const s=SERVICES[id]; const am=AREA_META[s.area]; const pos=k-deckI;
+    const el=document.createElement('div'); el.className='swcard'; el.style.transform=`translateY(${pos*12}px) scale(${1-pos*0.045})`; el.style.zIndex=20-pos;
+    el.innerHTML=`<div class="vid"><div class="frame ${am.art}" style="${bgi(svcImg(s))}"></div></div><div class="sw-shade"></div>
+      <div class="sw-chip">${am.emoji} ${am.label} · video</div>
+      <div class="sw-spark" style="background:radial-gradient(circle at 50% 45%,rgba(236,207,166,.5),transparent 60%)"></div>
+      <div class="sw-love"><span class="sw-love-pill">✨ added to your ritual</span></div>
+      <div class="sw-skip">skip</div>
+      <div class="sw-info"><div class="sw-plain">${SWIPE_COPY[id]}</div><div class="sw-tech">${s.name}</div><div class="sw-line">${s.short}</div></div>`;
+    wrap.appendChild(el); if(pos===0) attachDrag(el);
+  }
+}
+function attachDrag(card){
+  let sx=0,sy=0,dx=0,dy=0,active=false;
+  const love=card.querySelector('.sw-love'), skip=card.querySelector('.sw-skip'), spark=card.querySelector('.sw-spark');
+  const down=e=>{active=true; const p=pt(e); sx=p.x; sy=p.y; card.style.transition='none';};
+  const move=e=>{ if(!active)return; const p=pt(e); dx=p.x-sx; dy=p.y-sy; card.style.transform=`translate(${dx}px,${dy}px) rotate(${dx*0.06}deg)`;
+    const r=Math.min(Math.abs(dx)/90,1); love.style.opacity=dx>0?r:0; love.style.transform=`translate(-50%,-50%) scale(${0.7+r*0.3})`; spark.style.opacity=dx>0?r*0.9:0; skip.style.opacity=dx<0?r:0; };
+  const up=()=>{ if(!active)return; active=false; card.style.transition='transform .35s ease, opacity .35s'; if(Math.abs(dx)>95){fly(card,dx>0);} else {card.style.transform=''; love.style.opacity=0; skip.style.opacity=0; spark.style.opacity=0;} };
+  card.addEventListener('mousedown',down); window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
+  card.addEventListener('touchstart',down,{passive:true}); card.addEventListener('touchmove',move,{passive:true}); card.addEventListener('touchend',up); card.addEventListener('touchcancel',up);
+  function pt(e){ const t=e.touches&&e.touches[0]?e.touches[0]:e; return {x:t.clientX,y:t.clientY}; }
+}
+function fly(card,liked){ card.style.transform=`translate(${liked?520:-520}px,-40px) rotate(${liked?24:-24}deg)`; card.style.opacity=0;
+  if(liked){ const el=card.querySelector('.sw-love'); el.style.opacity=1; el.style.transform='translate(-50%,-50%) scale(1.05)'; state.liked.push(SWIPE_IDS[deckI]); }
+  setTimeout(()=>{ deckI++; if(deckI>=SWIPE_IDS.length) finishSwipe(); else { renderDeck(); updateCount(); } },280); }
+function updateCount(){ document.getElementById('swCount').textContent=`${Math.min(deckI+1,SWIPE_IDS.length)} / ${SWIPE_IDS.length}  ·  ${state.liked.length} ✦`; }
+function finishSwipe(){ buildHome(); show('s3'); const c=document.getElementById('curtain'); c.classList.remove('hide'); setTimeout(()=>c.classList.add('hide'),1400); }
+
+/* ───── S3 home ───── */
+function buildHome(){
+  let liked=[...new Set(state.liked.length?state.liked:SWIPE_IDS.slice(0,4))];
+  const areas=[...new Set(liked.map(id=>SERVICES[id].area))];
+  document.getElementById('hLoc').textContent=state.city;
+  /* popular/beginner rituals, biased to the categories they liked */
+  const POP={brows:['lamination','ombre','browtint'], lashes:['lashlift','volumelash','classiclash'], lips:['lipblush','liprefresh'],
+    eyes:['eyelinertop','lashline'], skin:['hydrafacial','glassskin','glowfacial'], pmu:['freckle','permblush']};
+  let pop=[]; areas.forEach(a=>(POP[a]||[]).slice(0,2).forEach(id=>pop.push(id)));
+  ['lashlift','hydrafacial','ombre','lipblush','glassskin','lamination'].forEach(id=>pop.push(id));
+  pop=[...new Set(pop)].slice(0,8);
+  let html=`
+    <div class="h-head"><div class="h-h1">Your <i>chozen</i> ritual</div></div>
+    <div class="wish" onclick="openWish()"><div class="wish-star">✶</div><div class="wish-txt">make a wish…</div></div>
+
+    <div class="h-sec-t">Your categories</div>
+    <div class="cuts">${areas.map(a=>{const m=AREA_META[a];
+      return `<div class="cutcat" onclick="openCategory('${a}')"><div class="frame ${m.art} after" style="${bgi(areaImg(a))}"></div><div class="em">${m.emoji}</div><div class="lab">${m.label}</div></div>`;}).join('')}</div>
+
+    <div class="h-sec-t">Looks you'll love<small>Real results, real stories</small></div>
+    <div class="reels">${REELS.map((r,i)=>{const m=AREA_META[SERVICES[r.services[0]].area];
+      return `<div class="reel" onclick="openReel(${i})"><div class="vid"><div class="frame ${m.art} after" style="${bgi(REELIMG[i%REELIMG.length])}"></div></div><div class="sh"></div>
+        <div class="reel-tag">▶ reel</div><div class="reel-h">${r.handle}</div><div class="reel-c">${r.cap}</div></div>`;}).join('')}</div>
+
+    <div class="h-sec-t">Loved by first-timers<small>Easy to start with, most-booked</small></div>
+    <div class="reels">${pop.map((id,i)=>{const s=SERVICES[id];
+      return `<div class="pcard" onclick="openService('${id}','s3')"><div class="pcard-art ${s.art} after" style="${bgi(svcImg(s))}"><div class="pcard-rank">#${i+1} loved</div></div>
+        <div class="pcard-i"><div class="pcard-n">${s.name}</div><div class="pcard-p">${payShort(s)}</div><div class="pcard-l">lasts ${s.lasts}</div></div></div>`;}).join('')}</div>
+
+    <div class="tryon">
+      <div class="tryon-eye">✨ chozen ai</div>
+      <div class="tryon-t">See it on <i>yourself</i></div>
+      <div class="tryon-s">Not sure what suits you? Try any ritual live on your own face.</div>
+      <div class="tryon-b" onclick="openTryon()">✨ Try a ritual with AI</div>
+    </div>
+
+    <div class="consult">
+      <div class="consult-t">Still deciding?</div>
+      <div class="consult-s">Book a 1:1 video consult with a certified cosmetologist.</div>
+      <div class="consult-b" onclick="openConsult()">📹 Book a video consultation</div>
+    </div>`;
+  document.getElementById('homeBody').innerHTML=html;
+}
+
+/* ───── category → services ───── */
+function openCategory(area){ const m=AREA_META[area];
+  document.getElementById('catTitle').innerHTML=`${m.label}<small>Rituals we offer</small>`;
+  const ids=Object.keys(SERVICES).filter(id=>SERVICES[id].area===area);
+  document.getElementById('catBody').innerHTML=`<div class="list-intro">Pick a ritual to see who does it best near you.</div>`+
+    ids.map(id=>{const s=SERVICES[id];
+      return `<div class="svc-row" onclick="openService('${id}','sCat')"><div class="svc-thumb ${s.art} after" style="${bgi(svcImg(s))}"></div>
+        <div><div class="svc-c-t">${s.name}</div><div class="svc-c-d">${s.short}</div><div class="svc-c-tag">${tagOf(s)}</div></div>
+        <div class="svc-go">›</div></div>`;}).join('');
+  show('sCat');
+}
+
+/* ───── service → providers ───── */
+function openService(id, back){ state.service=id; state.listBack=back||'s3'; const s=SERVICES[id];
+  document.getElementById('listTitle').innerHTML=`${s.name}<small>Results last ${s.lasts}</small>`;
+  document.getElementById('listBack').onclick=()=>go(state.listBack);
+  const facts = `<div class="svc-facts">
+    <div class="svc-fact">Sessions: <b>${s.sessions}</b></div>
+    <div class="svc-fact">Results last: <b>${s.lasts}</b></div></div>`;
+  document.getElementById('listBody').innerHTML=`<div class="list-intro">${s.blurb}</div>${facts}`+
+    PROVIDERS.map((p,i)=>`<div class="prov" onclick="openProvider(${i},'sList')">
+      <div class="prov-ba"><div class="${s.art} before" style="${bgi(BEFOREIMG)}"><div class="ba-tag">Before</div></div><div class="${s.art} after" style="${bgi(svcImg(s))}"><div class="ba-tag">After</div></div></div>
+      <div class="prov-info"><div class="prov-rowt"><div class="prov-name">${p.name} <span class="verified">✔</span></div><div class="prov-rate">★ ${p.rate}</div></div>
+        <div class="prov-kind">${p.kind}</div>
+        <div class="prov-sub">${s.name} · ${p.exp} · ${p.n} done</div>
+        <div class="prov-foot"><div class="prov-price">${payShort(s)}</div><div class="prov-go">View profile →</div></div></div></div>`).join('');
+  show('sList');
+}
+
+/* ───── provider profile ───── */
+function openProvider(i, back){ state.provider=i; state.ppBack=back||'sList'; const p=PROVIDERS[i]; const s=SERVICES[state.service];
+  const gal=[svcImg(s),IMG[s.area][0],REELIMG[0],SPLASHIMG[3],IMG.skin[0],REELIMG[1]];
+  document.getElementById('ppBack').onclick=()=>go(state.ppBack);
+  document.getElementById('ppGallery').innerHTML=`<div class="ba-slider" id="baSlider">
+      <div class="ba-layer after" style="${bgi(svcImg(s))}"></div>
+      <div class="ba-layer before" style="${bgi(BEFOREIMG)}"></div>
+      <div class="ba-tag">Before</div><div class="ba-tag ba-tag-r">After</div>
+      <div class="ba-divide"></div><div class="ba-knob">⟺</div>
+      <div class="ba-hint">drag to compare</div></div>`;
+  attachBA(document.getElementById('baSlider'));
+  document.getElementById('ppName').innerHTML=`${p.name} <span class="verified">✔</span>`;
+  document.getElementById('ppSpec').textContent=`${p.kind} · ${s.name} · ${state.city}`;
+  document.getElementById('ppStats').innerHTML=`<div class="pp-stat"><div class="pp-stat-v">★ ${p.rate}</div><div class="pp-stat-l">Rating</div></div>
+    <div class="pp-stat"><div class="pp-stat-v">${p.exp}</div><div class="pp-stat-l">Experience</div></div>
+    <div class="pp-stat"><div class="pp-stat-v">${p.n}</div><div class="pp-stat-l">Clients</div></div>`;
+  document.getElementById('ppTrust').innerHTML=p.trust.map(t=>`<div class="trust-chip">${t}</div>`).join('');
+  document.getElementById('ppWork').innerHTML=gal.slice(0,6).map((im,j)=>`<div class="work-cell after" style="${bgi(im)}"></div>`).join('');
+  document.getElementById('ppPriceLabel').textContent=`${s.name} · pay your way`;
+  state.plan=defPlan(s.price); renderPlan();
+  show('s4');
+}
+function setPlan(n){ state.plan=n; renderPlan(); }
+function renderPlan(){ const s=SERVICES[state.service]; const n=state.plan;
+  document.getElementById('payChips').innerHTML=[1,3,6].map(x=>`<div class="pay-chip ${x===n?'on':''}" onclick="setPlan(${x})">Pay in ${x}${x===1?'<small>5% off</small>':'<small>0% interest</small>'}</div>`).join('');
+  const amt=document.getElementById('payAmt'), note=document.getElementById('payNote'), tot=document.getElementById('payTotal');
+  if(n===1){ const once=Math.round(s.price*0.95/10)*10; amt.textContent=inr(once); note.innerHTML=`pay once <span class="pay-save">save ${inr(s.price-once)}</span>`; tot.textContent=`One-time payment · was ${inr(s.price)}`; }
+  else { amt.textContent=inr(perMonth(s.price,n)); note.textContent=`/month for ${n} months`; tot.textContent=`Total ${inr(s.price)} · 0% interest, no cost EMI`; }
+}
+/* before/after slider drag */
+function attachBA(sl){ if(!sl) return; let active=false;
+  const set=clientX=>{ const r=sl.getBoundingClientRect(); let p=(clientX-r.left)/r.width; p=Math.max(.04,Math.min(.96,p)); sl.style.setProperty('--p',(p*100)+'%'); };
+  const xOf=e=>{ const t=e.touches&&e.touches[0]?e.touches[0]:(e.changedTouches&&e.changedTouches[0]?e.changedTouches[0]:e); return t.clientX; };
+  const down=e=>{ active=true; const h=sl.querySelector('.ba-hint'); if(h) h.style.display='none'; set(xOf(e)); };
+  const move=e=>{ if(!active) return; set(xOf(e)); };
+  const up=()=>{ active=false; };
+  sl.addEventListener('mousedown',down); window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
+  sl.addEventListener('touchstart',down,{passive:true}); sl.addEventListener('touchmove',move,{passive:true}); sl.addEventListener('touchend',up);
+}
+
+/* ───── booking ───── */
+function makeDays(elId, onpick){ const el=document.getElementById(elId); el.innerHTML=''; const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; const now=new Date();
+  for(let i=1;i<=6;i++){ const d=new Date(now); d.setDate(now.getDate()+i); const c=document.createElement('div'); c.className='day';
+    c.innerHTML=`<div class="day-d">${dn[d.getDay()]}</div><div class="day-n">${d.getDate()}</div>`;
+    c.onclick=()=>{ el.querySelectorAll('.day').forEach(x=>x.classList.remove('on')); c.classList.add('on'); onpick(`${dn[d.getDay()]} ${d.getDate()}`); }; el.appendChild(c); } }
+function makeSlots(elId, onpick){ const el=document.getElementById(elId); el.innerHTML=''; ['10:30','12:00','1:30','3:00','4:30','6:00'].forEach(t=>{ const c=document.createElement('div'); c.className='slot'; c.textContent=t+(t<'12'?' am':' pm');
+    c.onclick=()=>{ el.querySelectorAll('.slot').forEach(x=>x.classList.remove('on')); c.classList.add('on'); onpick(c.textContent); }; el.appendChild(c); }); }
+function buildBooking(){ const p=PROVIDERS[state.provider], s=SERVICES[state.service];
+  document.getElementById('bkThumb').className='bk-thumb '+s.art+' after'; document.getElementById('bkThumb').style.cssText=bgi(svcImg(s));
+  document.getElementById('bkService').textContent=s.name; document.getElementById('bkArtist').textContent=`with ${p.name} · ${state.city}`;
+  state.day=null; state.slot=null;
+  makeDays('bkDays',v=>{state.day=v; checkBooking();}); makeSlots('bkSlots',v=>{state.slot=v; checkBooking();}); checkBooking(); }
+function checkBooking(){ document.getElementById('bkConfirm').disabled=!(state.day&&state.slot); }
+function confirmBooking(){ const p=PROVIDERS[state.provider], s=SERVICES[state.service]; const pay=planText(s,state.plan);
+  state.bookings.unshift({type:'appt', service:s.name, who:p.name, kind:p.kind, when:`${state.day}, ${state.slot}`, where:state.city, from:pay, art:s.art, img:svcImg(s)});
+  document.getElementById('cfTitle').textContent="You're chozen.";
+  document.getElementById('cfSub').textContent=`Your ${s.name} appointment with ${p.name} is requested. She'll confirm within a few hours.`;
+  document.getElementById('cfCard').innerHTML=`<div class="cf-row"><span class="k">Ritual</span><span class="v">${s.name}</span></div>
+    <div class="cf-row"><span class="k">With</span><span class="v">${p.name} ✔</span></div>
+    <div class="cf-row"><span class="k">When</span><span class="v">${state.day}, ${state.slot}</span></div>
+    <div class="cf-row"><span class="k">Where</span><span class="v">${state.city}</span></div>
+    <div class="cf-row"><span class="k">Payment</span><span class="v">${pay}</span></div>`;
+  show('s6'); }
+
+/* ───── video consult ───── */
+function openConsult(){ state.csDay=null; state.csSlot=null; makeDays('csDays',v=>{state.csDay=v; checkCons();}); makeSlots('csSlots',v=>{state.csSlot=v; checkCons();}); checkCons(); show('sCons'); }
+function checkCons(){ document.getElementById('csConfirm').disabled=!(state.csDay&&state.csSlot); }
+function confirmConsult(){ state.bookings.unshift({type:'consult', service:'Video consultation', who:'Dr. Myra Kapoor', kind:'Cosmetologist', when:`${state.csDay}, ${state.csSlot}`, where:'Video call', from:'₹499', art:'art-mauve', img:PORTRAITS[1]});
+  document.getElementById('cfTitle').textContent='Consultation booked.';
+  document.getElementById('cfSub').textContent='Your video consult is confirmed. Join from the link we send 5 minutes before.';
+  document.getElementById('cfCard').innerHTML=`<div class="cf-row"><span class="k">Type</span><span class="v">Video consultation</span></div>
+    <div class="cf-row"><span class="k">With</span><span class="v">Dr. Myra Kapoor ✔</span></div>
+    <div class="cf-row"><span class="k">When</span><span class="v">${state.csDay}, ${state.csSlot}</span></div>
+    <div class="cf-row"><span class="k">Fee</span><span class="v">₹499 (adjusted later)</span></div>`;
+  show('s6'); }
+
+/* ───── my bookings ───── */
+function openBookings(){ const b=document.getElementById('bookBody');
+  if(!state.bookings.length){ b.innerHTML=`<div class="empty">No bookings yet.<br>Find a ritual you love — it'll show up here.</div>`; }
+  else b.innerHTML=state.bookings.map(x=>`<div class="bkg-card"><div class="bkg-ic ${x.art} after" style="${x.img?bgi(x.img):''}">${x.type==='consult'?'📹':''}</div>
+    <div><div class="bkg-t">${x.service}</div><div class="bkg-s">${x.who} · ${x.kind}</div><div class="bkg-s">${x.where}</div></div>
+    <div class="bkg-when">${x.when}<br><span style="color:var(--muted)">${x.from}</span></div></div>`).join('');
+  show('sBook'); }
+
+/* ───── wish ───── */
+function openWish(){ const chips=document.getElementById('wishChips'); chips.innerHTML='';
+  [...new Set(WISH.map(w=>w.g))].forEach(g=>{ const wrap=document.createElement('div'); wrap.className='wish-grp';
+    wrap.innerHTML=`<div class="wish-grp-t">${g}</div>`+WISH.filter(w=>w.g===g).map(w=>`<span class="wish-chip" onclick="wishPick('${encodeURIComponent(w.q)}')">${w.q}</span>`).join(''); chips.appendChild(wrap); });
+  document.getElementById('wishRes').innerHTML=''; openSheet('wishSheet'); }
+function wishPick(q){ q=decodeURIComponent(q); const w=WISH.find(x=>x.q===q); const res=document.getElementById('wishRes');
+  res.innerHTML=`<div class="wish-grp-t" style="margin-top:18px">✶ chozen for you</div><div class="ai-line">For <b>“${q}”</b>, here's a curation:</div>`+
+    w.ids.map(id=>{const s=SERVICES[id]; return `<div class="ai-card" onclick="fromWish('${id}')"><div class="ai-thumb ${s.art} after" style="${bgi(svcImg(s))}"></div>
+      <div><div class="ai-c-t">${s.name}</div><div class="ai-c-s">${tagOf(s)}</div></div><div class="ai-c-go">›</div></div>`;}).join('');
+  res.scrollIntoView({behavior:'smooth'}); }
+function fromWish(id){ closeAll(); openService(id,'s3'); }
+
+/* ───── city / drawer ───── */
+function openCity(){ const l=document.getElementById('cityList'); l.innerHTML=CITIES.map(c=>`<div class="city-row ${c===state.city?'on':''}" onclick="pickCity('${c}')">${c}${c===state.city?' ✓':''}</div>`).join(''); openSheet('citySheet'); }
+function pickCity(c){ state.city=c; document.getElementById('hLoc').textContent=c; closeAll(); }
+function openDrawer(){ document.getElementById('drawerCats').innerHTML=AREAS.map(a=>{const m=AREA_META[a]; return `<div class="dr-link" onclick="closeAll();openCategory('${a}')"><span class="e">${m.emoji}</span> ${m.label}</div>`;}).join('');
+  document.getElementById('mask').classList.add('on'); document.getElementById('drawer').classList.add('on'); }
+function openSheet(id){ document.getElementById('mask').classList.add('on'); document.getElementById(id).classList.add('on'); }
+function closeAll(){ document.getElementById('mask').classList.remove('on'); document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('on')); document.getElementById('drawer').classList.remove('on'); }
+
+/* ───── reels fullscreen ───── */
+let reelIdx=0;
+function openReel(i){ reelIdx=i; renderReel(); document.getElementById('reelFs').classList.add('on'); }
+function renderReel(){ const r=REELS[reelIdx]; const m=AREA_META[SERVICES[r.services[0]].area];
+  document.getElementById('rfVid').innerHTML=`<div class="vid"><div class="frame ${m.art} after" style="${bgi(REELIMG[reelIdx%REELIMG.length])}"></div></div>`;
+  document.getElementById('rfHandle').textContent=r.handle; document.getElementById('rfCap').textContent=r.cap;
+  document.getElementById('rfDots').innerHTML=REELS.map((_,k)=>`<div class="rf-dot ${k===reelIdx?'on':''}"></div>`).join('');
+  document.getElementById('rfServices').classList.remove('on'); }
+function nextReel(){ reelIdx=(reelIdx+1)%REELS.length; renderReel(); }
+function prevReel(){ reelIdx=(reelIdx-1+REELS.length)%REELS.length; renderReel(); }
+function openReelServices(){ const r=REELS[reelIdx]; const box=document.getElementById('rfServices');
+  box.innerHTML=`<div class="sheet-grip"></div><div class="rf-svc-t">Rituals in this reel</div><div class="rf-svc-s">Tap one to see who does it near you.</div>`+
+    r.services.map(id=>{const s=SERVICES[id]; return `<div class="svc-row" onclick="reelToService('${id}')"><div class="svc-thumb ${s.art} after" style="${bgi(svcImg(s))}"></div>
+      <div><div class="svc-c-t">${s.name}</div><div class="svc-c-d">${s.short}</div><div class="svc-c-tag">${tagOf(s)}</div></div><div class="svc-go">›</div></div>`;}).join('');
+  box.classList.add('on'); }
+function reelToService(id){ closeReel(); openService(id,'s3'); }
+function closeReel(){ document.getElementById('reelFs').classList.remove('on'); document.getElementById('rfServices').classList.remove('on'); }
+/* reel gestures */
+(function(){ const fs=document.getElementById('reelFs'); let sx=0,sy=0,act=false;
+  const down=e=>{ if(document.getElementById('rfServices').classList.contains('on'))return; act=true; const p=pt(e); sx=p.x; sy=p.y; };
+  const up=e=>{ if(!act)return; act=false; const p=pt(e); const dx=p.x-sx, dy=p.y-sy;
+    if(Math.abs(dx)>Math.abs(dy)){ if(dx<-60) nextReel(); else if(dx>60) prevReel(); }
+    else { if(dy<-60) openReelServices(); else if(dy>80) closeReel(); } };
+  fs.addEventListener('mousedown',down); fs.addEventListener('mouseup',up);
+  fs.addEventListener('touchstart',down,{passive:true}); fs.addEventListener('touchend',up);
+  function pt(e){ const t=e.changedTouches&&e.changedTouches[0]?e.changedTouches[0]:e; return {x:t.clientX,y:t.clientY}; }
+})();
+
+/* ───── AI try-on ───── */
+let tryArea=null, tryService=null;
+function openTryon(){ tryArea=null; tryService=null; document.getElementById('tryCity').textContent=state.city;
+  document.getElementById('tryApplied').style.display='none'; document.getElementById('tryResult').classList.remove('on'); document.getElementById('trySnap').classList.add('dim');
+  const rail=document.getElementById('tryRail'); rail.innerHTML=AREAS.map(a=>{const m=AREA_META[a]; return `<div class="rail-i" data-a="${a}" onclick="tryPickArea('${a}')"><div class="e">${m.emoji}</div><div class="l">${m.label}</div></div>`;}).join('');
+  document.getElementById('trySub').innerHTML=''; show('sTry'); }
+function tryPickArea(a){ tryArea=a; tryService=null;
+  document.querySelectorAll('#tryRail .rail-i').forEach(x=>x.classList.toggle('on', x.dataset.a===a));
+  const ids=Object.keys(SERVICES).filter(id=>SERVICES[id].area===a);
+  document.getElementById('trySub').innerHTML=ids.map(id=>`<div class="try-chip" data-id="${id}" onclick="tryPickSvc('${id}')">${SERVICES[id].name}</div>`).join('');
+  document.getElementById('tryResult').classList.remove('on'); document.getElementById('trySnap').classList.add('dim'); document.getElementById('tryApplied').style.display='none'; }
+function tryPickSvc(id){ tryService=id;
+  document.querySelectorAll('#trySub .try-chip').forEach(x=>x.classList.toggle('on', x.dataset.id===id));
+  const gen=document.getElementById('tryGen'); gen.classList.add('on');
+  document.getElementById('tryResult').classList.remove('on');
+  setTimeout(()=>{ gen.classList.remove('on'); const ap=document.getElementById('tryApplied'); ap.textContent=`✨ ${SERVICES[id].name} applied`; ap.style.display='block';
+    document.getElementById('trySnap').classList.remove('dim'); },1500); }
+function trySnapshot(){ if(!tryService)return; const f=document.getElementById('tryFlash'); f.style.transition='none'; f.style.opacity='.9';
+  setTimeout(()=>{ f.style.transition='opacity .5s'; f.style.opacity='0'; },40);
+  document.getElementById('tryRT').textContent=SERVICES[tryService].name+' looks great on you';
+  document.getElementById('tryGo').onclick=()=>openService(tryService,'s3');
+  setTimeout(()=>document.getElementById('tryResult').classList.add('on'),250); }
+
+function resetAll(){ Object.assign(state,{liked:[],service:null,provider:null,day:null,slot:null}); deckI=0; show('s1'); }
+buildCollage();
+</script>
+</body>
+</html>
