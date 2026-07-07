@@ -1,0 +1,1407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IndiaMART Buyer Memory — Working Prototype</title>
+</head>
+<body>
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  :root {
+    --paper: #F1F3EF;
+    --paper-raised: #FFFFFF;
+    --paper-sunken: #E7EBE6;
+    --ink: #17211D;
+    --ink-soft: #4E5A53;
+    --ink-faint: #8C9891;
+    --line: #C9D1CA;
+    --line-soft: #DEE4DD;
+    --accent: #0E7C6B;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #E1EFE9;
+    --warm: #C2721F;
+    --warm-soft: #F5E7D4;
+    --success: #3F8F5F;
+    --success-soft: #E2F0E6;
+    --warning: #A9791E;
+    --warning-soft: #F5EAD2;
+    --critical: #A23B32;
+    --critical-soft: #F5E1DE;
+    --shadow: rgba(23, 33, 29, 0.10);
+
+    --font-display: "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #101513;
+      --paper-raised: #181F1C;
+      --paper-sunken: #0B0F0D;
+      --ink: #E7EDE9;
+      --ink-soft: #A2AEA7;
+      --ink-faint: #647069;
+      --line: #2A3531;
+      --line-soft: #202B27;
+      --accent: #45BCA4;
+      --accent-ink: #08120F;
+      --accent-soft: #17302A;
+      --warm: #DE9A50;
+      --warm-soft: #35270F;
+      --success: #71C28E;
+      --success-soft: #163220;
+      --warning: #E1BB6C;
+      --warning-soft: #332911;
+      --critical: #E28B81;
+      --critical-soft: #391E1B;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #101513;
+    --paper-raised: #181F1C;
+    --paper-sunken: #0B0F0D;
+    --ink: #E7EDE9;
+    --ink-soft: #A2AEA7;
+    --ink-faint: #647069;
+    --line: #2A3531;
+    --line-soft: #202B27;
+    --accent: #45BCA4;
+    --accent-ink: #08120F;
+    --accent-soft: #17302A;
+    --warm: #DE9A50;
+    --warm-soft: #35270F;
+    --success: #71C28E;
+    --success-soft: #163220;
+    --warning: #E1BB6C;
+    --warning-soft: #332911;
+    --critical: #E28B81;
+    --critical-soft: #391E1B;
+    --shadow: rgba(0, 0, 0, 0.45);
+  }
+  :root[data-theme="light"] {
+    --paper: #F1F3EF;
+    --paper-raised: #FFFFFF;
+    --paper-sunken: #E7EBE6;
+    --ink: #17211D;
+    --ink-soft: #4E5A53;
+    --ink-faint: #8C9891;
+    --line: #C9D1CA;
+    --line-soft: #DEE4DD;
+    --accent: #0E7C6B;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #E1EFE9;
+    --warm: #C2721F;
+    --warm-soft: #F5E7D4;
+    --success: #3F8F5F;
+    --success-soft: #E2F0E6;
+    --warning: #A9791E;
+    --warning-soft: #F5EAD2;
+    --critical: #A23B32;
+    --critical-soft: #F5E1DE;
+    --shadow: rgba(23, 33, 29, 0.10);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { overflow-x: hidden; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+  button { font-family: inherit; cursor: pointer; }
+  table { border-collapse: collapse; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 34px 28px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead-title h1 { font-size: 1.9rem; font-weight: 600; letter-spacing: -0.01em; }
+  .masthead-title p {
+    margin: 6px 0 0;
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+  .masthead-meta { text-align: right; flex-shrink: 0; }
+  .masthead-meta .eyebrow { display: block; margin-bottom: 4px; }
+  .masthead-meta strong { font-size: 0.95rem; }
+
+  /* ---------- Controls ---------- */
+  .controls {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .segmented {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--paper-raised);
+    overflow: hidden;
+  }
+  .segmented button {
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    font-size: 0.84rem;
+    font-weight: 500;
+    border-right: 1px solid var(--line);
+  }
+  .segmented button:last-child { border-right: none; }
+  .segmented button.active {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .control-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--ink);
+    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: 0.84rem;
+    font-weight: 500;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+  .btn-quiet {
+    border-color: transparent;
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 8px 10px;
+  }
+  .btn-small { padding: 5px 10px; font-size: 0.76rem; border-radius: 6px; }
+  .btn[disabled] { opacity: 0.5; cursor: default; }
+
+  /* ---------- Layout shell ---------- */
+  main { max-width: 1180px; margin: 0 auto; padding: 8px 28px 80px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ---------- Cold start banner ---------- */
+  .coldstart-banner {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 18px 0 28px;
+  }
+  .coldstart-banner .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); margin-top: 6px; flex-shrink: 0;
+  }
+  .coldstart-banner h3 { font-size: 0.95rem; font-family: var(--font-body); font-weight: 700; }
+  .coldstart-banner p { margin: 4px 0 0; color: var(--ink-soft); font-size: 0.88rem; max-width: 62ch; }
+
+  /* ---------- Sections ---------- */
+  .section { margin-bottom: 34px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .section-head h2 { font-size: 1.15rem; font-weight: 600; }
+  .section-head .hint { font-size: 0.8rem; color: var(--ink-faint); font-family: var(--font-mono); }
+  .card-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  .proc-scroll-wrap { position: relative; }
+  .proc-scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 2px 2px 12px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .proc-scroll .card, .proc-scroll .empty-note { flex: 0 0 280px; scroll-snap-align: start; }
+  .proc-scroll::-webkit-scrollbar { height: 8px; }
+  .proc-scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+  .proc-scroll-wrap::after {
+    content: '';
+    position: absolute; top: 0; right: 0; bottom: 12px; width: 36px;
+    background: linear-gradient(to right, transparent, var(--paper));
+    pointer-events: none;
+  }
+
+  .card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: box-shadow 0.4s ease;
+  }
+  .card-hero { border-left: 3px solid var(--accent); }
+  .card.flash { animation: flashPulse 1.2s ease; }
+  @keyframes flashPulse {
+    0% { box-shadow: 0 0 0 3px var(--accent); }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  .card-title { font-weight: 700; font-size: 1rem; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    width: fit-content;
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+  .pill-accent { background: var(--accent-soft); color: var(--accent); }
+  .pill-warm { background: var(--warm-soft); color: var(--warm); }
+  .pill-success { background: var(--success-soft); color: var(--success); }
+  .pill-warning { background: var(--warning-soft); color: var(--warning); }
+  .pill-quiet { background: var(--paper-sunken); color: var(--ink-faint); }
+  .stat-row { display: flex; gap: 18px; font-size: 0.82rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .stat-row b { color: var(--ink); font-weight: 700; }
+  .card-meta { font-size: 0.82rem; color: var(--ink-soft); }
+  .card-actions { margin-top: auto; display: flex; gap: 8px; padding-top: 4px; flex-wrap: wrap; }
+  .why {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    background: var(--paper-sunken);
+    border-radius: 6px;
+    padding: 7px 10px;
+    border-left: 2px solid var(--accent);
+  }
+  .why b { color: var(--ink); }
+  .why.price-alert { border-left-color: var(--warm); background: var(--warm-soft); }
+  .empty-note { color: var(--ink-faint); font-size: 0.86rem; font-style: italic; padding: 6px 2px; }
+
+  /* Archived */
+  .archived-toggle { background: none; border: none; color: var(--ink-faint); font-family: var(--font-mono); font-size: 0.76rem; text-decoration: underline; padding: 0; }
+  .archived-list { margin-top: 10px; display: none; flex-direction: column; gap: 6px; }
+  .archived-list.open { display: flex; }
+  .card-quiet {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    border: 1px dashed var(--line); border-radius: 7px; padding: 9px 12px;
+    font-size: 0.82rem; color: var(--ink-soft); background: var(--paper-sunken);
+  }
+  .card-quiet b { color: var(--ink); }
+
+  /* Suppliers you know */
+  .know-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .know-card {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: var(--paper-raised);
+  }
+  .know-card .kname { font-weight: 700; font-size: 0.9rem; }
+  .know-card .kmeta { font-size: 0.76rem; color: var(--ink-faint); margin-top: 2px; }
+
+  /* Market intelligence tiles */
+  .mi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .mi-tile { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .mi-tile .label { font-size: 0.76rem; color: var(--ink-faint); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; }
+  .mi-tile .value { font-size: 1.4rem; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .mi-tile .value.up { color: var(--success); }
+  .mi-tile .sub { font-size: 0.78rem; color: var(--ink-soft); }
+  .spark { display: flex; align-items: flex-end; gap: 3px; height: 26px; margin-top: 4px; }
+  .spark i { flex: 1; background: var(--accent); border-radius: 2px 2px 0 0; opacity: 0.75; }
+
+  /* Discovery tiles */
+  .discovery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .discovery-tile {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    background: var(--paper-sunken);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .discovery-tile b { display: block; color: var(--ink); font-size: 0.9rem; }
+  .discovery-tile .why { border-left: none; padding: 0; background: transparent; }
+
+  .ghost-card { opacity: 0.55; filter: grayscale(0.4); position: relative; }
+  .ghost-card::after {
+    content: "Unlocks once you start procuring";
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 12px;
+    font-size: 0.78rem; font-family: var(--font-mono);
+    color: var(--ink-soft);
+    background: color-mix(in srgb, var(--paper) 55%, transparent);
+  }
+
+  /* ---------- Modals ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(10, 14, 12, 0.55);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 5vh 20px;
+    z-index: 50;
+    overflow-y: auto;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    max-width: 720px;
+    width: 100%;
+    padding: 26px 28px;
+    box-shadow: 0 20px 60px var(--shadow);
+  }
+  .modal-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+  .modal-head h2 { font-size: 1.25rem; }
+  .modal-close { background: none; border: none; font-size: 1.3rem; color: var(--ink-faint); line-height: 1; }
+  .modal-sub { color: var(--ink-soft); font-size: 0.85rem; margin: 4px 0 18px; }
+
+  /* Timeline */
+  .timeline { display: flex; align-items: center; gap: 0; margin: 18px 0 22px; flex-wrap: wrap; }
+  .tl-step { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100px; font-size: 0.7rem; color: var(--ink-faint); }
+  .tl-step .node { width: 11px; height: 11px; border-radius: 50%; background: var(--line); border: 2px solid var(--paper-raised); margin-bottom: 6px; }
+  .tl-step.done .node { background: var(--accent); }
+  .tl-step.done { color: var(--ink-soft); }
+  .tl-step.current .node { background: var(--warm); box-shadow: 0 0 0 3px var(--warm-soft); }
+  .tl-step.current { color: var(--ink); font-weight: 700; }
+  .tl-line { flex: 1; height: 2px; background: var(--line); margin-bottom: 20px; min-width: 10px; }
+  .tl-line.done { background: var(--accent); }
+
+  /* Comparison table */
+  .cmp-table { width: 100%; font-size: 0.85rem; margin-bottom: 16px; }
+  .cmp-table th, .cmp-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-soft); }
+  .cmp-table th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); font-weight: 600; }
+  .cmp-table td.num { font-variant-numeric: tabular-nums; }
+  .cmp-highlight { color: var(--accent); font-weight: 700; }
+  .cmp-table tr.chosen td { background: var(--accent-soft); }
+  .placeholder-note { color: var(--ink-soft); font-size: 0.86rem; background: var(--paper-sunken); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; }
+
+  .ai-summary {
+    background: var(--accent-soft);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.85rem;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .ai-summary .eyebrow { color: var(--accent); margin-bottom: 4px; }
+  .shortlist-line { font-size: 0.82rem; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
+
+  .modal-actions { display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--line-soft); margin-top: 4px; padding-top: 16px; }
+
+  /* Requirement form */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin: 16px 0 20px; }
+  .form-field { display: flex; flex-direction: column; gap: 5px; }
+  .form-field label { font-size: 0.76rem; color: var(--ink-faint); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.04em; display: flex; justify-content: space-between; }
+  .form-field input {
+    border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px;
+    background: var(--paper); color: var(--ink); font-size: 0.88rem; font-family: var(--font-body);
+  }
+  .autofill-tag { color: var(--accent); font-family: var(--font-mono); font-size: 0.65rem; text-transform: none; letter-spacing: 0; }
+  .reuse-prompt {
+    background: var(--warm-soft); border: 1px solid var(--warm); border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .reuse-prompt p { margin: 0; font-size: 0.86rem; }
+  .reuse-prompt .btns { display: flex; gap: 8px; flex-shrink: 0; }
+
+  /* Supplier listing */
+  .supplier-group { margin-bottom: 20px; }
+  .supplier-group-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .supplier-group-head h3 { font-family: var(--font-body); font-size: 0.92rem; font-weight: 700; }
+  .supplier-group-head .rule { font-size: 0.72rem; color: var(--ink-faint); font-family: var(--font-mono); }
+  .supplier-card {
+    display: flex; justify-content: space-between; align-items: center; gap: 14px;
+    border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
+    background: var(--paper-raised);
+  }
+  .supplier-card .sname { font-weight: 700; font-size: 0.92rem; }
+  .supplier-card .swhy { font-size: 0.78rem; color: var(--ink-soft); margin-top: 2px; }
+  .supplier-card .sfacts { display: flex; gap: 12px; font-size: 0.76rem; color: var(--ink-faint); margin-top: 4px; font-variant-numeric: tabular-nums; }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--paper);
+    padding: 11px 18px; border-radius: 8px; font-size: 0.85rem; z-index: 100;
+    box-shadow: 0 10px 30px var(--shadow); max-width: 80vw; text-align: center;
+  }
+  .toast.hidden { display: none; }
+
+  /* ---------- Platform view ---------- */
+  .platform-grid {
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 22px; align-items: start;
+  }
+  @media (max-width: 860px) { .platform-grid { grid-template-columns: 1fr; } }
+
+  .arch-box {
+    background: var(--paper-raised); border: 1px solid var(--line); border-radius: 8px; padding: 18px;
+  }
+  .arch-title { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 14px; }
+  .arch-node {
+    border: 1px solid var(--line); border-radius: 7px; padding: 10px 14px; margin-bottom: 4px;
+    font-size: 0.86rem; font-weight: 600; background: var(--paper-sunken);
+  }
+  .arch-node.hi { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .arch-sub { font-size: 0.72rem; color: var(--ink-soft); font-weight: 400; margin-top: 5px; display: flex; flex-wrap: wrap; gap: 5px; }
+  .arch-chip { background: var(--paper-raised); border: 1px solid var(--line-soft); border-radius: 4px; padding: 2px 7px; font-family: var(--font-mono); }
+  .arch-arrow { text-align: center; color: var(--ink-faint); font-size: 0.8rem; padding: 2px 0 6px; }
+
+  .log-box {
+    background: var(--paper-sunken); border: 1px solid var(--line); border-radius: 8px;
+    padding: 14px 16px; height: 260px; overflow-y: auto;
+    font-family: var(--font-mono); font-size: 0.76rem; line-height: 1.65;
+  }
+  .log-line { display: flex; gap: 8px; margin-bottom: 3px; }
+  .log-line .t { color: var(--ink-faint); flex-shrink: 0; }
+  .log-tag { color: var(--accent); }
+  .log-tag.warm { color: var(--warm); }
+  .log-tag.warning { color: var(--warning); }
+
+  .metrics-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-top: 20px; }
+  .metric-card { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+  .metric-card .eyebrow { margin-bottom: 6px; }
+  .metric-card .big { font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .metric-card .delta { font-size: 0.78rem; margin-left: 6px; font-weight: 600; }
+  .metric-card .delta.good { color: var(--success); }
+  .metric-card .delta.watch { color: var(--warning); }
+  .gauge { height: 8px; background: var(--line-soft); border-radius: 6px; margin-top: 10px; position: relative; overflow: hidden; }
+  .gauge i { position: absolute; inset: 0; width: var(--w, 50%); background: var(--success); border-radius: 6px; }
+  .gauge .threshold { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--critical); left: var(--t, 30%); }
+  .metric-card .foot { font-size: 0.72rem; color: var(--ink-faint); margin-top: 8px; }
+
+  .balance-callout {
+    background: var(--warm-soft); border: 1px solid var(--warm); border-radius: 8px; padding: 16px 18px; margin-top: 20px;
+  }
+  .balance-callout h3 { font-family: var(--font-body); font-size: 0.92rem; font-weight: 700; color: var(--warm); margin-bottom: 6px; }
+  .balance-callout p { margin: 0; font-size: 0.85rem; color: var(--ink); }
+
+
+  footer.strip {
+    max-width: 1180px; margin: 0 auto; padding: 20px 28px 40px;
+    color: var(--ink-faint); font-size: 0.78rem; font-family: var(--font-mono);
+    border-top: 1px solid var(--line-soft); margin-top: 20px;
+  }
+</style>
+
+<div class="masthead">
+  <div class="masthead-title">
+    <h1>Buyer Memory</h1>
+    <p>IndiaMART has solved supplier discovery. The next opportunity is buyer continuity — every procurement becomes context for the next one.</p>
+  </div>
+  <div class="masthead-meta">
+    <span class="eyebrow">Phase 1 · Working Prototype</span>
+    <strong>IndiaMART Buyer Intelligence Platform</strong>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="control-group">
+    <span class="eyebrow" style="margin-right:2px;">Viewing as</span>
+    <div class="segmented" id="persona-toggle">
+      <button data-persona="returning" class="active">Priya · returning buyer</button>
+      <button data-persona="new">New buyer</button>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="segmented" id="view-toggle">
+      <button data-view="buyer" class="active">Buyer Experience</button>
+      <button data-view="platform">Platform View</button>
+    </div>
+    <button class="btn btn-primary" id="btn-new-requirement">+ New Requirement</button>
+  </div>
+</div>
+
+<main>
+  <!-- ============ BUYER EXPERIENCE VIEW ============ -->
+  <section class="view active" id="view-buyer">
+
+    <div class="coldstart-banner" id="coldstart-banner" style="display:none;">
+      <div class="dot"></div>
+      <div>
+        <h3 id="coldstart-title">Building your Buyer Memory</h3>
+        <p id="coldstart-text">No procurement history yet, so this page falls back to marketplace intelligence rather than guessing. Post your first requirement below and watch this page start remembering you.</p>
+      </div>
+    </div>
+
+    <!-- Section 1: My Procurement -->
+    <div class="section" id="section-myprocurement">
+      <div class="section-head">
+        <h2>My Procurement</h2>
+        <span class="hint">scroll for more · resume before you search again</span>
+      </div>
+      <div class="proc-scroll-wrap"><div class="proc-scroll" id="procurement-grid"></div></div>
+      <button class="archived-toggle" id="archived-toggle" style="margin-top:10px;">Archived (0)</button>
+      <div class="archived-list" id="archived-list"></div>
+    </div>
+
+    <!-- Section 1b: Suppliers You Know -->
+    <div class="section" id="section-know">
+      <div class="section-head">
+        <h2>Suppliers You Know</h2>
+        <span class="hint">interaction history only — not vendor management, no purchase data needed</span>
+      </div>
+      <div class="know-row">
+        <div class="know-card">
+          <div>
+            <div class="kname">ABC Packaging</div>
+            <div class="kmeta">Engaged 6 times over 4 months</div>
+          </div>
+          <button class="btn btn-small know-contact" data-name="ABC Packaging">Contact</button>
+        </div>
+        <div class="know-card">
+          <div>
+            <div class="kname">XYZ Packaging</div>
+            <div class="kmeta">Engaged 3 times over 2 months</div>
+          </div>
+          <button class="btn btn-small know-contact" data-name="XYZ Packaging">Contact</button>
+        </div>
+        <div class="know-card">
+          <div>
+            <div class="kname">Metro Cartons</div>
+            <div class="kmeta">Engaged 4 times over 5 months</div>
+          </div>
+          <button class="btn btn-small know-contact" data-name="Metro Cartons">Contact</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Smart Reordering -->
+    <div class="section" id="section-reorder">
+      <div class="section-head">
+        <h2>Smart Reordering</h2>
+        <span class="hint">most B2B purchases repeat — this remembers so you don't have to</span>
+      </div>
+      <div class="card-row" id="reorder-grid">
+        <div class="card" data-reorder="Stretch Film">
+          <span class="pill pill-warm">DUE IN 5 DAYS</span>
+          <div class="card-title">Stretch Film</div>
+          <div class="card-meta">Monthly purchase · usually reordered every ~30 days</div>
+          <div class="why"><b>Why</b> — based on your Stretch Film procurement completed 25 days ago with ABC Packaging.</div>
+          <div class="card-actions">
+            <button class="btn btn-primary reorder-btn" data-item="Stretch Film">Reorder</button>
+            <button class="btn btn-quiet dismiss-btn" data-item="Stretch Film">Dismiss</button>
+          </div>
+        </div>
+        <div class="card" data-reorder="Packaging Boxes">
+          <span class="pill pill-accent">42 DAYS AGO</span>
+          <div class="card-title">Packaging Boxes</div>
+          <div class="card-meta">Last sourced 42 days ago · usually reordered every ~45 days</div>
+          <div class="card-actions">
+            <button class="btn btn-primary reorder-btn" data-item="Packaging Boxes">Reorder</button>
+            <button class="btn btn-quiet dismiss-btn" data-item="Packaging Boxes">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Smart Recommendations -->
+    <div class="section" id="section-recommend">
+      <div class="section-head">
+        <h2>Smart Recommendations</h2>
+        <span class="hint">every recommendation explains why</span>
+      </div>
+      <div class="card-row">
+        <div class="card">
+          <div class="card-title">XYZ Packaging</div>
+          <div class="why"><b>Recommended because</b> — responds 35% faster than suppliers you've contacted, similar MOQ.</div>
+          <div class="card-actions">
+            <button class="btn" id="btn-compare-supplier">Compare</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Shipping Labels</div>
+          <div class="why"><b>Recommended because</b> — buyers sourcing Packaging typically also source Shipping Labels within 10 days.</div>
+          <div class="card-actions">
+            <button class="btn" id="btn-start-related">Start Procurement</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Market Intelligence -->
+    <div class="section" id="section-market">
+      <div class="section-head">
+        <h2>Market Intelligence</h2>
+        <span class="hint">shown only when there's an action attached to it</span>
+      </div>
+      <div class="mi-grid" id="market-grid"></div>
+    </div>
+
+    <!-- Section 5: Marketplace Discovery -->
+    <div class="section" id="section-discovery">
+      <div class="section-head">
+        <h2>Marketplace Discovery</h2>
+        <span class="hint">unchanged — Buyer Memory extends discovery, never replaces it</span>
+      </div>
+      <div class="discovery-grid" id="discovery-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ PLATFORM VIEW ============ -->
+  <section class="view" id="view-platform">
+    <div class="section-head" style="margin-bottom:16px;">
+      <h2>Buyer Memory Platform</h2>
+      <span class="hint">what the screen on the left is actually built on</span>
+    </div>
+
+    <div class="platform-grid">
+      <div class="arch-box">
+        <div class="arch-title">Architecture</div>
+
+        <div class="arch-node">Buyer Actions
+          <div class="arch-sub"><span class="arch-chip">search</span><span class="arch-chip">rfq</span><span class="arch-chip">supplier view</span><span class="arch-chip">chat</span><span class="arch-chip">reorder</span></div>
+        </div>
+        <div class="arch-arrow">↓ every action writes here</div>
+        <div class="arch-node hi">Buyer Memory Platform
+          <div class="arch-sub"><span class="arch-chip">buyer profile</span><span class="arch-chip">procurement history</span><span class="arch-chip">search history</span><span class="arch-chip">supplier interactions</span><span class="arch-chip">preferences</span></div>
+        </div>
+        <div class="arch-arrow">↓ single source of truth, not siloed per feature</div>
+        <div class="arch-node">Recommendation Engine
+          <div class="arch-sub"><span class="arch-chip">reorder</span><span class="arch-chip">continue procurement</span><span class="arch-chip">requirement reuse</span><span class="arch-chip">supplier match</span></div>
+        </div>
+        <div class="arch-arrow">↓ never bypasses confidence scoring</div>
+        <div class="arch-node">AI Layer
+          <div class="arch-sub"><span class="arch-chip">explains</span><span class="arch-chip">summarizes</span><span class="arch-chip">personalizes</span></div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-node">Buyer Experience — Home · Search · RFQ · Supplier Listing</div>
+      </div>
+
+      <div>
+        <div class="arch-box">
+          <div class="arch-title">Live event log — interact with the Buyer Experience tab</div>
+          <div class="log-box" id="platform-log"></div>
+        </div>
+
+        <div class="balance-callout">
+          <h3>Marketplace Balance rule (active in Supplier Listing)</h3>
+          <p>Previously-Engaged suppliers are capped at 40% of listing slots; Explore Marketplace always keeps ≥2 slots above the fold — regardless of buyer history. Personalization guides discovery, it never replaces it, because supplier subscriptions still depend on new-buyer reach.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:28px;">
+      <h2>This session</h2>
+      <span class="hint">recalculates live — go interact in Buyer Experience, then come back</span>
+    </div>
+    <div class="metrics-strip" id="session-metrics"></div>
+
+    <div class="section-head" style="margin-top:28px;">
+      <h2>At marketplace scale <span style="font-weight:400; color:var(--ink-faint); font-family:var(--font-mono); font-size:0.7rem; text-transform:uppercase;">(illustrative — not computed from this demo)</span></h2>
+      <span class="hint">what this dashboard would show across all buyers in production</span>
+    </div>
+    <div class="metrics-strip">
+      <div class="metric-card">
+        <div class="eyebrow">North star (proxy, not confirmed)</div>
+        <div><span class="big">3.4 days</span><span class="delta good">↓ 18%</span></div>
+        <div class="foot">Time to Last Meaningful Supplier Interaction (TLMSI)</div>
+      </div>
+      <div class="metric-card">
+        <div class="eyebrow">Lead concentration index</div>
+        <div><span class="big">33%</span><span class="delta watch">watch</span></div>
+        <div class="gauge"><i style="--w:33%;"></i><span class="threshold" style="--t:40%;"></span></div>
+        <div class="foot">share of enquiries to previously-unengaged suppliers · floor 40%</div>
+      </div>
+      <div class="metric-card">
+        <div class="eyebrow">Buyer NPS, returning cohort</div>
+        <div><span class="big">+38</span></div>
+        <div class="foot">"IndiaMART remembers what I usually procure"</div>
+      </div>
+      <div class="metric-card">
+        <div class="eyebrow">Low-intent enquiry rate</div>
+        <div><span class="big">↓ 24%</span><span class="delta good">fewer junk leads</span></div>
+        <div class="foot">enquiries suppliers flag as spam or low-intent</div>
+      </div>
+      <div class="metric-card">
+        <div class="eyebrow">Supplier renewal intent</div>
+        <div><span class="big">82%</span><span class="delta good">↑ 9pts</span></div>
+        <div class="foot">suppliers citing lead relevance as a renewal driver</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="strip">Phase 1 scope: Buyer Memory, Procurement Workspace, Smart Reordering, Requirement Reuse, Recommendations, Market Intelligence. Excluded from V1: Vendor Management, Transaction Management, AI Negotiation, Autonomous Procurement.</footer>
+
+<!-- ============ MODAL: Procurement Detail ============ -->
+<div class="modal-overlay hidden" id="modal-procurement">
+  <div class="modal" id="modal-procurement-inner"></div>
+</div>
+
+<!-- ============ MODAL: New Requirement ============ -->
+<div class="modal-overlay hidden" id="modal-requirement">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>New Requirement</h2>
+      <button class="modal-close" data-close="modal-requirement">×</button>
+    </div>
+
+    <div class="reuse-prompt" id="reuse-prompt">
+      <p><b>Looks familiar</b> — you created <b>Packing Tape</b> 50 days ago. Reuse it?</p>
+      <div class="btns">
+        <button class="btn btn-primary" id="btn-reuse">Use Previous</button>
+        <button class="btn" id="btn-fresh">Start Fresh</button>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-field"><label>Product / category <span class="autofill-tag" id="tag-1"></span></label><input id="f-category" value="" placeholder="e.g. Packaging Boxes"></div>
+      <div class="form-field"><label>Location <span class="autofill-tag" id="tag-2"></span></label><input id="f-location" value="" placeholder="Delivery city"></div>
+      <div class="form-field"><label>MOQ <span class="autofill-tag" id="tag-3"></span></label><input id="f-moq" value="" placeholder="Minimum order qty"></div>
+      <div class="form-field"><label>Specifications <span class="autofill-tag" id="tag-4"></span></label><input id="f-spec" value="" placeholder="Size, material, etc."></div>
+      <div class="form-field"><label>Delivery preference <span class="autofill-tag" id="tag-5"></span></label><input id="f-delivery" value="" placeholder="Standard / express"></div>
+      <div class="form-field"><label>Preferred supplier <span class="autofill-tag" id="tag-6"></span></label><input id="f-supplier" value="" placeholder="Optional"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="btn-post-requirement">Post Requirement</button>
+      <button class="btn" data-close="modal-requirement">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: Supplier Listing ============ -->
+<div class="modal-overlay hidden" id="modal-suppliers">
+  <div class="modal" style="max-width:760px;">
+    <div class="modal-head">
+      <h2>Suppliers — Packaging</h2>
+      <button class="modal-close" data-close="modal-suppliers">×</button>
+    </div>
+    <div class="modal-sub">Grouped by Buyer Memory, balanced by marketplace rule</div>
+
+    <div class="supplier-group">
+      <div class="supplier-group-head"><h3>Previously Engaged</h3><span class="rule">capped at 40% of slots</span></div>
+      <div class="supplier-card">
+        <div><div class="sname">ABC Packaging</div><div class="swhy">Contacted 6 times · last interaction 12 days ago</div><div class="sfacts"><span>25 min response</span><span>500 MOQ</span><span>Delhi NCR</span></div></div>
+        <button class="btn">View</button>
+      </div>
+      <div class="supplier-card">
+        <div><div class="sname">Metro Cartons</div><div class="swhy">Quote viewed twice</div><div class="sfacts"><span>40 min response</span><span>600 MOQ</span><span>Noida</span></div></div>
+        <button class="btn">View</button>
+      </div>
+    </div>
+
+    <div class="supplier-group">
+      <div class="supplier-group-head"><h3>Recommended For You</h3><span class="rule">buyer history + marketplace quality</span></div>
+      <div class="supplier-card">
+        <div><div class="sname">XYZ Packaging</div><div class="swhy">Recommended because — responds 35% faster than suppliers you've contacted</div><div class="sfacts"><span>12 min response</span><span>1,000 MOQ</span><span>Gurugram</span></div></div>
+        <button class="btn">View</button>
+      </div>
+    </div>
+
+    <div class="supplier-group">
+      <div class="supplier-group-head"><h3>Explore Marketplace</h3><span class="rule">guaranteed ≥2 slots — protects new-supplier discovery</span></div>
+      <div class="supplier-card">
+        <div><div class="sname">Verde Packworks</div><div class="swhy">New verified supplier this month</div><div class="sfacts"><span>Unrated yet</span><span>Sonipat</span></div></div>
+        <button class="btn">View</button>
+      </div>
+      <div class="supplier-card">
+        <div><div class="sname">Northline Cartons</div><div class="swhy">High marketplace trust score, no prior interaction with you</div><div class="sfacts"><span>50 min response</span><span>Panipat</span></div></div>
+        <button class="btn">View</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script>
+(function () {
+  var TIMELINE_KEYS = ['created','contacted','quotes','replied','waiting','done'];
+  var TIMELINE_LABELS = {
+    created: 'Requirement created', contacted: 'Suppliers contacted', quotes: 'Quotations received',
+    replied: 'Supplier replied', waiting: 'Waiting', done: 'Completed'
+  };
+
+  var CATEGORY_ADJACENCY = {
+    'Packaging': [
+      { title:'Shipping Labels', why:'Frequently sourced alongside {cat} by similar buyers' },
+      { title:'Stretch Film', why:'Adjacent category to your {cat} procurement' },
+      { title:'Biodegradable Wraps', why:'Matches rising demand trends you are tracking' },
+      { title:'Industrial Tape', why:'Commonly bundled with {cat} orders' }
+    ],
+    'Office Setup': [
+      { title:'Ergonomic Chairs', why:'Adjacent category to your {cat} procurement' },
+      { title:'Conference Room AV', why:'Frequently sourced alongside {cat}' },
+      { title:'Office Stationery', why:'Commonly bundled with {cat} setup' },
+      { title:'Storage Cabinets', why:'Matches buyers furnishing new offices' }
+    ],
+    'General': [
+      { title:'Trending Categories', why:'Popular across the marketplace this week' },
+      { title:'Explore', why:'Top categories for buyers like you' },
+      { title:'New Launch', why:'Recently onboarded, verified suppliers' },
+      { title:'Category Pulse', why:'Most-searched category this month' }
+    ]
+  };
+
+  function seedProcurements() {
+    return [
+      { id:'p1', title:'Custom Corrugated Boxes', category:'Packaging', status:'evaluating',
+        started:'15 Jun', lastActivity:'ABC Packaging replied 2 hours ago',
+        suppliersContacted:8, quotes:5, timeline:['created','contacted','quotes','replied'],
+        comparison:[
+          {name:'ABC Packaging', response:'25 min', moq:'500 units', location:'Delhi NCR', rating:4.6, hi:'moq'},
+          {name:'XYZ Packaging', response:'12 min', moq:'1,000 units', location:'Gurugram', rating:4.4, hi:'response'},
+          {name:'DEF Packaging', response:'1 hr 40 min', moq:'750 units', location:'Faridabad', rating:3.9, hi:''}
+        ],
+        shortlist:[],
+        aiSummary:'ABC Packaging offers the lowest MOQ. XYZ Packaging responds fastest. Both are within your usual delivery radius.' },
+      { id:'p2', title:'Office Workstations', category:'Office Setup', status:'draft',
+        started:'3 days ago', lastActivity:'Not yet posted to suppliers',
+        suppliersContacted:0, quotes:0, timeline:['created'], comparison:[], shortlist:[], aiSummary:null,
+        draftFields:{ category:'Office Workstations', location:'Gurugram', moq:'10 units', spec:'4-seater modular', delivery:'Standard', supplier:'' } },
+      { id:'p3', title:'Stretch Film', category:'Packaging', status:'completed',
+        started:'25 days ago', lastActivity:'Marked done by you — ABC Packaging',
+        suppliersContacted:4, quotes:3, timeline:['created','contacted','quotes','replied','waiting','done'],
+        comparison:[], shortlist:['ABC Packaging'], aiSummary:'Closed with ABC Packaging — your 3rd order with them.' },
+      { id:'p4', title:'Eco Mailers — Sample Order', category:'Packaging', status:'archived',
+        started:'2 months ago', lastActivity:'Archived — no activity for 30+ days',
+        suppliersContacted:2, quotes:1, timeline:['created','contacted'], comparison:[], shortlist:[], aiSummary:null }
+    ];
+  }
+
+  var state = { persona: 'returning' };
+  var byPersona = { returning: seedProcurements(), new: [] };
+  var newPersonaFirstPost = false;
+  var nextId = 10;
+  var currentModalId = null;
+  var editingId = null;
+  var formReuseAssisted = false;
+  var pendingCategoryTag = 'General';
+  var sessionStats = { created: 0, reused: 0, shortlistDecisions: 0 };
+
+  function renderSessionMetrics() {
+    var el = document.getElementById('session-metrics');
+    if (!el) return;
+    var reuseRate = sessionStats.created > 0 ? Math.round(100 * sessionStats.reused / sessionStats.created) : null;
+    el.innerHTML =
+      '<div class="metric-card"><div class="eyebrow">Procurement actions</div><div><span class="big">' + sessionStats.created + '</span></div><div class="foot">new requirements, reorders and draft completions posted this session</div></div>' +
+      '<div class="metric-card"><div class="eyebrow">Requirement reuse accepted</div><div><span class="big">' + (reuseRate===null ? '—' : reuseRate + '%') + '</span></div><div class="foot">of session requirements started via "Use Previous"</div></div>' +
+      '<div class="metric-card"><div class="eyebrow">Shortlist decisions</div><div><span class="big">' + sessionStats.shortlistDecisions + '</span></div><div class="foot">suppliers shortlisted for comparison, this session</div></div>';
+  }
+
+  var logBox = document.getElementById('platform-log');
+
+  function log(tag, msg, cls) {
+    var t = new Date();
+    var ts = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0') + ':' + String(t.getSeconds()).padStart(2,'0');
+    var line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = '<span class="t">' + ts + '</span><span class="log-tag ' + (cls||'') + '">[' + tag + ']</span><span></span>';
+    line.lastElementChild.textContent = msg;
+    logBox.appendChild(line);
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    clearTimeout(el._t);
+    el._t = setTimeout(function () { el.classList.add('hidden'); }, 2800);
+  }
+
+  function procurements() { return byPersona[state.persona]; }
+  function findProc(id) { return procurements().find(function(p){ return p.id === id; }); }
+
+  var statusMeta = {
+    draft:      { label:'DRAFT', cls:'pill-accent', cta:'Complete & Post', action:'edit-draft' },
+    searching:  { label:'SEARCHING', cls:'pill-accent', cta:'View Procurement', action:'view' },
+    evaluating: { label:'EVALUATING', cls:'pill-warm', cta:'Continue Procurement', action:'view' },
+    waiting:    { label:'WAITING', cls:'pill-warm', cta:'Continue Procurement', action:'view' },
+    completed:  { label:'COMPLETED · BUYER-CONFIRMED', cls:'pill-success', cta:'View Summary', action:'view' }
+  };
+
+  function cardHtml(p) {
+    var meta = statusMeta[p.status];
+    return '<div class="card' + (p.id==='p1'?' card-hero':'') + '" data-proc-card="' + p.id + '">' +
+      '<span class="pill ' + meta.cls + '">' + meta.label + '</span>' +
+      '<div class="card-title">' + p.title + '</div>' +
+      '<div class="card-meta">Started ' + p.started + ' · ' + p.lastActivity + '</div>' +
+      (p.status !== 'draft' ? '<div class="stat-row"><span>Suppliers contacted <b>' + p.suppliersContacted + '</b></span><span>Quotes received <b>' + p.quotes + '</b></span></div>' : '') +
+      (p.shortlist && p.shortlist.length ? '<div class="why"><b>Shortlisted (' + p.shortlist.length + ')</b> — ' + p.shortlist.join(', ') + '</div>' : '') +
+      (p.category === 'Packaging' && ['draft','searching','evaluating','waiting'].indexOf(p.status) !== -1 ? '<div class="why price-alert"><b>Packaging prices ↑7%</b> in the last 30 days — worth deciding soon.</div>' : '') +
+      '<div class="card-actions"><button class="btn btn-primary" data-action="' + meta.action + '" data-id="' + p.id + '">' + meta.cta + '</button></div>' +
+      '</div>';
+  }
+
+  function quietCardHtml(p) {
+    return '<div class="card-quiet"><span><b>' + p.title + '</b> · ' + p.started + ' · ' + p.lastActivity + '</span></div>';
+  }
+
+  function renderProcurements() {
+    var grid = document.getElementById('procurement-grid');
+    var all = procurements();
+    var active = all.filter(function(p){ return p.status !== 'archived'; });
+    var archived = all.filter(function(p){ return p.status === 'archived'; });
+    grid.innerHTML = active.length ? active.map(cardHtml).join('') : '<div class="empty-note">No active procurements yet — post a requirement to start.</div>';
+    document.getElementById('archived-toggle').textContent = 'Archived (' + archived.length + ')';
+    document.getElementById('archived-list').innerHTML = archived.map(quietCardHtml).join('');
+    renderDiscovery();
+  }
+
+  document.getElementById('archived-toggle').addEventListener('click', function(){
+    document.getElementById('archived-list').classList.toggle('open');
+  });
+
+  document.getElementById('procurement-grid').addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-action]'); if (!btn) return;
+    var id = btn.dataset.id, action = btn.dataset.action, p = findProc(id);
+    if (action === 'edit-draft') {
+      openRequirementModal({ editId: id });
+    } else {
+      openProcurementModal(id);
+    }
+  });
+
+  function buildTimelineHtml(p) {
+    var currentIdx = p.status === 'completed' ? TIMELINE_KEYS.indexOf('done') : p.timeline.length - 1;
+    var stepsToShow = p.status === 'completed' ? TIMELINE_KEYS : TIMELINE_KEYS.slice(0, Math.min(TIMELINE_KEYS.length, p.timeline.length + 1));
+    var html = '';
+    stepsToShow.forEach(function(key, i){
+      var done = i < currentIdx || (p.status==='completed');
+      var current = i === currentIdx && p.status !== 'completed';
+      html += '<div class="tl-step ' + (done?'done':'') + (current?' current':'') + '"><div class="node"></div>' + TIMELINE_LABELS[key] + '</div>';
+      if (i < stepsToShow.length - 1) html += '<div class="tl-line ' + (done?'done':'') + '"></div>';
+    });
+    return html;
+  }
+
+  function buildComparisonHtml(p) {
+    if (!p.quotes || !p.comparison.length) {
+      return '<div class="placeholder-note">Waiting for supplier responses — nothing to compare yet.</div>';
+    }
+    var rows = p.comparison.map(function(c){
+      var chosen = p.shortlist.indexOf(c.name) !== -1;
+      return '<tr class="' + (chosen?'chosen':'') + '">' +
+        '<td>' + c.name + '</td>' +
+        '<td class="num">★ ' + c.rating.toFixed(1) + '</td>' +
+        '<td class="num' + (c.hi==='response'?' cmp-highlight':'') + '">' + c.response + '</td>' +
+        '<td class="num' + (c.hi==='moq'?' cmp-highlight':'') + '">' + c.moq + '</td>' +
+        '<td>' + c.location + '</td>' +
+        '<td><button class="btn btn-small shortlist-btn" data-name="' + c.name + '">' + (chosen?'★ Shortlisted':'Shortlist') + '</button></td>' +
+        '</tr>';
+    }).join('');
+    return '<table class="cmp-table"><tr><th>Supplier</th><th>Rating</th><th>Response time</th><th>MOQ</th><th>Location</th><th></th></tr>' + rows + '</table>';
+  }
+
+  function openProcurementModal(id) {
+    currentModalId = id;
+    renderModalBody();
+    document.getElementById('modal-procurement').classList.remove('hidden');
+    log('Buyer Memory', 'opened Procurement Detail — ' + findProc(id).title);
+  }
+
+  function renderModalBody(mode) {
+    var p = findProc(currentModalId);
+    var inner = document.getElementById('modal-procurement-inner');
+    var isDone = p.status === 'completed';
+    var shortlistLine = p.shortlist.length ? '<div class="shortlist-line">Shortlisted (' + p.shortlist.length + '): ' + p.shortlist.join(', ') + '</div>' : '';
+    var aiHtml = p.aiSummary ? '<div class="ai-summary"><div class="eyebrow">AI summary</div>' + p.aiSummary + '</div>' : '';
+
+    var actionsHtml;
+    if (isDone) {
+      actionsHtml = '';
+    } else if (mode === 'choose-winner') {
+      actionsHtml = '<div class="placeholder-note"><b>Who did you actually go with?</b> This is the one piece of ground truth IndiaMART can\'t see on its own.</div>' +
+        '<div class="modal-actions">' +
+        p.shortlist.map(function(name){ return '<button class="btn btn-primary choose-winner-btn" data-name="' + name + '">' + name + '</button>'; }).join('') +
+        '<button class="btn" id="ma-someone-else">Someone else / offline</button>' +
+        '<button class="btn btn-quiet" id="ma-cancel-choose">Cancel</button>' +
+        '</div>';
+    } else {
+      actionsHtml = '<div class="modal-actions">' +
+        '<button class="btn btn-primary" id="ma-contact">Contact Supplier</button>' +
+        '<button class="btn" id="ma-compare">Compare</button>' +
+        '<button class="btn" id="ma-archive">Archive</button>' +
+        '<button class="btn" id="ma-done" style="border-color:var(--success); color:var(--success);">Mark as Done</button>' +
+        '</div>';
+    }
+
+    inner.innerHTML =
+      '<div class="modal-head"><h2>' + p.title + '</h2><button class="modal-close" data-close="modal-procurement">×</button></div>' +
+      '<div class="modal-sub">Started ' + p.started + ' · ' + statusMeta[p.status].label + '</div>' +
+      '<div class="timeline">' + buildTimelineHtml(p) + '</div>' +
+      shortlistLine +
+      buildComparisonHtml(p) +
+      aiHtml +
+      actionsHtml;
+
+    if (mode === 'choose-winner') {
+      inner.querySelectorAll('.choose-winner-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){ finalizeDone(p, btn.dataset.name); });
+      });
+      var someoneElse = document.getElementById('ma-someone-else');
+      if (someoneElse) someoneElse.addEventListener('click', function(){ finalizeDone(p, null); });
+      var cancelChoose = document.getElementById('ma-cancel-choose');
+      if (cancelChoose) cancelChoose.addEventListener('click', function(){ renderModalBody(); });
+      return;
+    }
+
+    inner.querySelectorAll('.shortlist-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var name = btn.dataset.name;
+        var idx = p.shortlist.indexOf(name);
+        if (idx === -1) {
+          p.shortlist.push(name);
+          sessionStats.shortlistDecisions++;
+          log('Recommendation Engine', 'buyer shortlisted ' + name + ' — attribution recorded for outcome tracking');
+        } else {
+          p.shortlist.splice(idx, 1);
+          log('Recommendation Engine', 'buyer removed ' + name + ' from shortlist');
+        }
+        renderModalBody();
+        renderProcurements();
+        renderSessionMetrics();
+      });
+    });
+    var maContact = document.getElementById('ma-contact');
+    if (maContact) maContact.addEventListener('click', function(){
+      toast('Opening conversation with supplier.');
+      log('Buyer Memory', 'contact initiated from Procurement Detail');
+    });
+    var maCompare = document.getElementById('ma-compare');
+    if (maCompare) maCompare.addEventListener('click', function(){
+      var table = inner.querySelector('.cmp-table');
+      if (table) { table.classList.remove('flash'); void table.offsetWidth; table.classList.add('flash'); }
+      toast(p.aiSummary || 'Comparing quotes received so far.');
+      log('Recommendation Engine', 'comparison view opened — ' + p.quotes + ' quotes weighed');
+    });
+    var maArchive = document.getElementById('ma-archive');
+    if (maArchive) maArchive.addEventListener('click', function(){
+      p.status = 'archived';
+      p.lastActivity = 'Archived by you';
+      closeModal('modal-procurement');
+      renderProcurements();
+      toast('Procurement archived.');
+      log('Buyer Memory', p.title + ' moved to archived');
+    });
+    var maDone = document.getElementById('ma-done');
+    if (maDone) maDone.addEventListener('click', function(){
+      if (p.shortlist.length > 1) {
+        renderModalBody('choose-winner');
+      } else {
+        finalizeDone(p, p.shortlist[0] || null);
+      }
+    });
+  }
+
+  function finalizeDone(p, winnerName) {
+    p.status = 'completed';
+    p.shortlist = winnerName ? [winnerName] : [];
+    p.lastActivity = 'Marked done by you' + (winnerName ? ' — ' + winnerName : '');
+    if (!p.timeline.includes('done')) p.timeline.push('done');
+    closeModal('modal-procurement');
+    renderProcurements();
+    renderSessionMetrics();
+    toast('Thanks — this helps IndiaMART learn what actually happened.');
+    log('Buyer Memory', 'ground-truth signal captured — ' + p.title + ' marked done' + (winnerName ? ' (winner: ' + winnerName + ')' : ' (no winner attributed)'));
+  }
+
+  function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+  function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+  document.addEventListener('click', function(e){
+    var closeId = e.target.dataset && e.target.dataset.close;
+    if (closeId) closeModal(closeId);
+    if (e.target.classList && e.target.classList.contains('modal-overlay')) e.target.classList.add('hidden');
+  });
+
+  document.getElementById('persona-toggle').addEventListener('click', function(e){
+    var btn = e.target.closest('button'); if (!btn) return;
+    document.querySelectorAll('#persona-toggle button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    state.persona = btn.dataset.persona;
+    if (state.persona === 'new') { newPersonaFirstPost = false; byPersona.new = []; }
+    applyPersona();
+  });
+
+  document.getElementById('view-toggle').addEventListener('click', function(e){
+    var btn = e.target.closest('button'); if (!btn) return;
+    document.querySelectorAll('#view-toggle button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+    document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    if (btn.dataset.view === 'platform') renderSessionMetrics();
+  });
+
+  // --- Reordering ---
+  document.getElementById('reorder-grid').addEventListener('click', function(e){
+    var reorderBtn = e.target.closest('.reorder-btn');
+    var dismissBtn = e.target.closest('.dismiss-btn');
+    if (reorderBtn) {
+      var item = reorderBtn.dataset.item;
+      var np = { id:'p'+(nextId++), title:item, category:'Packaging', status:'searching',
+        started:'Just now', lastActivity:'Reorder posted — awaiting supplier responses',
+        suppliersContacted:0, quotes:0, timeline:['created'], comparison:[], shortlist:[], aiSummary:null };
+      procurements().unshift(np);
+      sessionStats.created++;
+      renderSessionMetrics();
+      renderProcurements();
+      toast('Reorder started for ' + item + ' — added to My Procurement.');
+      log('Recommendation Engine', 'reorder accepted — ' + item, 'warm');
+      var card = document.querySelector('[data-proc-card="' + np.id + '"]');
+      document.getElementById('section-myprocurement').scrollIntoView({behavior:'smooth', block:'start'});
+      if (card) { card.classList.add('flash'); }
+    }
+    if (dismissBtn) {
+      var wrap = dismissBtn.closest('[data-reorder]');
+      var name = dismissBtn.dataset.item;
+      wrap.style.transition = 'opacity 0.3s ease';
+      wrap.style.opacity = '0';
+      setTimeout(function(){ wrap.remove(); }, 300);
+      toast('Dismissed — we will learn from this.');
+      log('Recommendation Engine', 'reminder dismissed for ' + name + ' — feedback recorded to reduce similar low-confidence nudges', 'warning');
+    }
+  });
+
+  document.getElementById('btn-compare-supplier').addEventListener('click', function(){
+    openModal('modal-suppliers');
+    log('Buyer Memory', 'supplier comparison opened from recommendation card');
+  });
+  document.getElementById('btn-start-related').addEventListener('click', function(){
+    openRequirementModal({ presetCategory: 'Shipping Labels', skipReuse: true });
+    log('Recommendation Engine', 'related-category procurement started — Shipping Labels');
+  });
+
+  document.querySelectorAll('.know-contact').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      toast('Opening conversation with ' + btn.dataset.name + '.');
+      log('Buyer Memory', 'direct contact via Suppliers You Know — ' + btn.dataset.name);
+    });
+  });
+
+  // --- Market Intelligence (persona aware) ---
+  function renderMarket() {
+    var grid = document.getElementById('market-grid');
+    if (state.persona === 'new') {
+      grid.innerHTML =
+        '<div class="mi-tile"><div class="label">Packaging prices</div><div class="value up">↑ 7%</div><div class="sub">past 30 days, marketplace-wide</div></div>' +
+        '<div class="mi-tile"><div class="label">New verified suppliers</div><div class="value">53</div><div class="sub">in Packaging, this month</div></div>';
+      return;
+    }
+    grid.innerHTML =
+      '<div class="mi-tile"><div class="label">Eco mailers demand</div><div class="value up">+42%</div><div class="sub">adjacent to categories you have sourced</div><div class="spark" id="spark2"></div><div class="card-actions"><button class="btn btn-small" id="mi-explore-eco">Explore Eco Mailer suppliers</button></div></div>' +
+      '<div class="mi-tile"><div class="label">New verified suppliers</div><div class="value">53</div><div class="sub">in Packaging, this month</div><div class="card-actions"><button class="btn btn-small" id="mi-view-new">View new suppliers</button></div></div>';
+    buildSparklines();
+    document.getElementById('mi-explore-eco').addEventListener('click', function(){
+      openModal('modal-suppliers');
+      log('Recommendation Engine', 'market trend → supplier discovery — Eco Mailers demand spike');
+    });
+    document.getElementById('mi-view-new').addEventListener('click', function(){
+      openModal('modal-suppliers');
+      log('Buyer Memory', 'buyer opened Explore Marketplace from Market Intelligence tile');
+    });
+  }
+
+  // --- Discovery (persona aware "why") ---
+  function renderDiscovery() {
+    var grid = document.getElementById('discovery-grid');
+    var active = procurements().filter(function(p){ return p.status !== 'archived'; });
+    if (state.persona === 'new' || !active.length) {
+      grid.innerHTML =
+        '<div class="discovery-tile"><b>Trending</b><div class="why">Popular across the marketplace this week</div></div>' +
+        '<div class="discovery-tile"><b>Explore</b><div class="why">Top categories for new buyers in your city</div></div>' +
+        '<div class="discovery-tile"><b>New launch</b><div class="why">Recently onboarded, verified suppliers</div></div>' +
+        '<div class="discovery-tile"><b>Category</b><div class="why">Most-searched category this month</div></div>';
+      return;
+    }
+    var latest = active[0];
+    var pool = CATEGORY_ADJACENCY[latest.category] || CATEGORY_ADJACENCY['General'];
+    grid.innerHTML = pool.map(function(item){
+      return '<div class="discovery-tile"><b>' + item.title + '</b><div class="why">' + item.why.replace('{cat}', latest.title) + '</div></div>';
+    }).join('');
+  }
+
+  function buildSparklines() {
+    [['spark2',[2,2,3,3,4,5,6,7,8,10]]].forEach(function(pair){
+      var el = document.getElementById(pair[0]);
+      if (!el) return;
+      el.innerHTML = '';
+      pair[1].forEach(function(v){
+        var bar = document.createElement('i');
+        bar.style.height = (v * 9) + '%';
+        el.appendChild(bar);
+      });
+    });
+  }
+
+  // --- New Requirement modal ---
+  function openRequirementModal(opts) {
+    opts = opts || {};
+    editingId = opts.editId || null;
+    formReuseAssisted = false;
+    pendingCategoryTag = 'General';
+    ['f-category','f-location','f-moq','f-spec','f-delivery','f-supplier'].forEach(function(id){ document.getElementById(id).value=''; });
+    ['tag-1','tag-2','tag-3','tag-4','tag-5','tag-6'].forEach(function(id){ document.getElementById(id).textContent=''; });
+
+    if (editingId) {
+      var draft = findProc(editingId);
+      document.getElementById('reuse-prompt').style.display = 'none';
+      document.getElementById('f-category').value = draft.draftFields.category;
+      document.getElementById('f-location').value = draft.draftFields.location;
+      document.getElementById('f-moq').value = draft.draftFields.moq;
+      document.getElementById('f-spec').value = draft.draftFields.spec;
+      document.getElementById('f-delivery').value = draft.draftFields.delivery;
+      document.getElementById('f-supplier').value = draft.draftFields.supplier;
+      ['tag-1','tag-2','tag-3','tag-4','tag-5','tag-6'].forEach(function(id){ document.getElementById(id).textContent = 'from draft'; });
+      log('Buyer Memory', 'resuming saved draft — ' + draft.title);
+    } else if (opts.presetCategory) {
+      document.getElementById('reuse-prompt').style.display = 'none';
+      document.getElementById('f-category').value = opts.presetCategory;
+      pendingCategoryTag = 'Packaging';
+    } else {
+      var showReuse = state.persona === 'returning';
+      document.getElementById('reuse-prompt').style.display = showReuse ? 'flex' : 'none';
+      log('Buyer Memory', showReuse ? 'checked history before showing blank form — match found' : 'no similar history — blank form shown directly');
+    }
+    openModal('modal-requirement');
+  }
+
+  document.getElementById('btn-new-requirement').addEventListener('click', function(){ openRequirementModal({}); });
+
+  document.getElementById('btn-reuse').addEventListener('click', function(){
+    document.getElementById('f-category').value = 'Packing Tape';
+    document.getElementById('f-location').value = 'Delhi NCR';
+    document.getElementById('f-moq').value = '200 rolls';
+    document.getElementById('f-spec').value = '48mm BOPP tape';
+    document.getElementById('f-delivery').value = 'Standard, 5-7 days';
+    document.getElementById('f-supplier').value = '';
+    ['tag-1','tag-2','tag-3','tag-4','tag-5','tag-6'].forEach(function(id){ document.getElementById(id).textContent = 'auto-filled'; });
+    document.getElementById('reuse-prompt').style.display = 'none';
+    formReuseAssisted = true;
+    pendingCategoryTag = 'Packaging';
+    log('Recommendation Engine', 'requirement reuse applied — fields pre-filled from Buyer Memory');
+  });
+  document.getElementById('btn-fresh').addEventListener('click', function(){
+    document.getElementById('reuse-prompt').style.display = 'none';
+    log('Buyer Memory', 'buyer chose to start fresh — reuse suggestion dismissed');
+  });
+
+  document.getElementById('btn-post-requirement').addEventListener('click', function(){
+    var category = document.getElementById('f-category').value || 'New Requirement';
+    if (editingId) {
+      var p = findProc(editingId);
+      p.title = category;
+      p.status = 'searching';
+      p.lastActivity = 'Posted to suppliers — awaiting responses';
+      closeModal('modal-requirement');
+      sessionStats.created++;
+      renderSessionMetrics();
+      renderProcurements();
+      toast('Draft posted — now live with suppliers.');
+      log('Buyer Memory', 'draft converted to active procurement — ' + category);
+      editingId = null;
+    } else {
+      var wasEmpty = procurements().filter(function(x){return x.status!=='archived';}).length === 0;
+      var np = { id:'p'+(nextId++), title:category, category:pendingCategoryTag, status:'searching',
+        started:'Just now', lastActivity:'Posted — awaiting supplier responses',
+        suppliersContacted:0, quotes:0, timeline:['created'], comparison:[], shortlist:[], aiSummary:null };
+      procurements().unshift(np);
+      closeModal('modal-requirement');
+      sessionStats.created++;
+      if (formReuseAssisted) sessionStats.reused++;
+      renderSessionMetrics();
+      renderProcurements();
+      toast('Requirement posted.');
+      log('Buyer Memory', 'new requirement written — procurement history updated');
+      if (state.persona === 'new' && wasEmpty) {
+        newPersonaFirstPost = true;
+        revealFirstProcurement();
+      }
+    }
+  });
+
+  function revealFirstProcurement() {
+    document.getElementById('coldstart-title').textContent = 'Buyer Memory just started';
+    document.getElementById('coldstart-text').textContent = '1 procurement now on file. Reordering and recommendations unlock once there is enough history to be confident about them — this page will keep changing as you use it.';
+    document.getElementById('section-myprocurement').style.display = 'block';
+  }
+
+  function applyPersona() {
+    var isNew = state.persona === 'new';
+    var hasFirst = isNew && newPersonaFirstPost;
+    var banner = document.getElementById('coldstart-banner');
+    banner.style.display = isNew ? 'flex' : 'none';
+    if (hasFirst) {
+      document.getElementById('coldstart-title').textContent = 'Buyer Memory just started';
+      document.getElementById('coldstart-text').textContent = '1 procurement now on file. Reordering and recommendations unlock once there is enough history to be confident about them — this page will keep changing as you use it.';
+    } else {
+      document.getElementById('coldstart-title').textContent = 'Building your Buyer Memory';
+      document.getElementById('coldstart-text').textContent = 'No procurement history yet, so this page falls back to marketplace intelligence rather than guessing. Post your first requirement below and watch this page start remembering you.';
+    }
+    document.getElementById('section-myprocurement').style.display = (!isNew || hasFirst) ? 'block' : 'none';
+    document.getElementById('section-know').style.display = isNew ? 'none' : 'block';
+    document.getElementById('section-reorder').style.display = isNew ? 'none' : 'block';
+    document.getElementById('section-recommend').style.display = isNew ? 'none' : 'block';
+
+    renderProcurements();
+    renderMarket();
+    renderSessionMetrics();
+    seedLog();
+  }
+
+  function seedLog() {
+    logBox.innerHTML = '';
+    if (state.persona === 'returning') {
+      log('Buyer Memory', 'session start — loaded profile for Priya Mehta, Mehta Packaging Solutions');
+      log('Recommendation Engine', 'confidence: HIGH — 20+ prior Packaging searches');
+      log('Recommendation Engine', 'Smart Reordering triggered — Stretch Film due in 5 days', 'warm');
+    } else if (newPersonaFirstPost) {
+      log('Buyer Memory', 'first procurement recorded — history depth: 1');
+      log('Recommendation Engine', 'confidence: LOW — still below threshold for reorder/recommendation surfacing', 'warning');
+    } else {
+      log('Buyer Memory', 'session start — no prior history found for this account');
+      log('Recommendation Engine', 'confidence: LOW — falling back to Marketplace Intelligence (cold start)', 'warning');
+    }
+  }
+
+  applyPersona();
+})();
+</script>
+
+</body>
+</html>

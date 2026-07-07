@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buyer Memory — One-Pager</title>
+</head>
+<body>
+<style>
+  :root {
+    --paper: #F1F3EF;
+    --paper-raised: #FFFFFF;
+    --paper-sunken: #E7EBE6;
+    --ink: #17211D;
+    --ink-soft: #4E5A53;
+    --ink-faint: #8C9891;
+    --line: #C9D1CA;
+    --line-soft: #DEE4DD;
+    --accent: #0E7C6B;
+    --accent-soft: #E1EFE9;
+    --warm: #C2721F;
+    --warm-soft: #F5E7D4;
+    --font-display: "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #101513; --paper-raised: #181F1C; --paper-sunken: #0B0F0D;
+      --ink: #E7EDE9; --ink-soft: #A2AEA7; --ink-faint: #647069;
+      --line: #2A3531; --line-soft: #202B27;
+      --accent: #45BCA4; --accent-soft: #17302A;
+      --warm: #DE9A50; --warm-soft: #35270F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #101513; --paper-raised: #181F1C; --paper-sunken: #0B0F0D;
+    --ink: #E7EDE9; --ink-soft: #A2AEA7; --ink-faint: #647069;
+    --line: #2A3531; --line-soft: #202B27;
+    --accent: #45BCA4; --accent-soft: #17302A;
+    --warm: #DE9A50; --warm-soft: #35270F;
+  }
+  :root[data-theme="light"] {
+    --paper: #F1F3EF; --paper-raised: #FFFFFF; --paper-sunken: #E7EBE6;
+    --ink: #17211D; --ink-soft: #4E5A53; --ink-faint: #8C9891;
+    --line: #C9D1CA; --line-soft: #DEE4DD;
+    --accent: #0E7C6B; --accent-soft: #E1EFE9;
+    --warm: #C2721F; --warm-soft: #F5E7D4;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
+  body {
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+  .page { max-width: 720px; margin: 0 auto; padding: 56px 28px 80px; }
+  .kicker {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px; display: block;
+  }
+  .linkbar {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.02em;
+    margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--line);
+  }
+  .linkbar a {
+    color: var(--accent); text-decoration: none; padding: 5px 10px;
+    border: 1px solid var(--line); border-radius: 6px; background: var(--paper-raised);
+  }
+  .linkbar a:hover { border-color: var(--accent); }
+  .linkbar a.current { color: var(--ink-faint); background: var(--paper-sunken); }
+  .linkbar span.sep { color: var(--ink-faint); }
+  header.masthead { margin-bottom: 8px; }
+  header.masthead h1 { font-size: 2.1rem; font-weight: 600; letter-spacing: -0.01em; }
+  header.masthead p.deck {
+    font-family: var(--font-display); font-style: italic; color: var(--ink-soft);
+    font-size: 1.05rem; margin: 10px 0 0; max-width: 58ch; text-wrap: balance;
+  }
+  .rule { border: none; border-top: 1px solid var(--line); margin: 32px 0; }
+  section { margin-bottom: 30px; }
+  section h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 10px; }
+  p { margin: 0 0 12px; max-width: 68ch; }
+  p:last-child { margin-bottom: 0; }
+  ul { margin: 0 0 12px; padding-left: 20px; max-width: 66ch; }
+  li { margin-bottom: 6px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+  .impact-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .impact-cols { grid-template-columns: 1fr; } }
+  .callout {
+    background: var(--accent-soft); border-left: 3px solid var(--accent);
+    border-radius: 6px; padding: 14px 18px; margin: 14px 0; font-size: 0.95rem;
+  }
+  .callout b { color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 4px 0 12px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  th { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); font-weight: 600; }
+  .impact-head { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+  .impact-list { margin: 0; padding-left: 18px; font-size: 0.88rem; }
+  .impact-list li { margin-bottom: 7px; }
+  .north-star { display: flex; align-items: center; gap: 16px; margin: 10px 0 16px; flex-wrap: wrap; }
+  .north-star .box { border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; background: var(--paper-raised); flex: 1; min-width: 220px; }
+  .north-star .box .label { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); }
+  .north-star .box .val { font-size: 1.05rem; font-weight: 600; margin-top: 3px; }
+  .north-star .arrow { color: var(--ink-faint); font-size: 1.3rem; }
+  .howto { background: var(--paper-sunken); border-radius: 8px; padding: 18px 20px; }
+  .howto ol { margin: 0; padding-left: 20px; }
+  .howto li { margin-bottom: 8px; }
+  .footnote { color: var(--ink-faint); font-size: 0.82rem; margin-top: 6px; }
+  @media print {
+    body { background: #fff; }
+    .page { max-width: none; padding: 0 6mm; }
+  }
+</style>
+
+<div class="page">
+  <div class="linkbar">
+    <a class="current" href="https://pseudonym-cyber.github.io/sonal-portfolio/indiamart.html">📋 One-pager (this page)</a>
+    <span class="sep">·</span>
+    <a href="https://pseudonym-cyber.github.io/sonal-portfolio/indiamart-share.html">🧠 Working prototype →</a>
+  </div>
+  <header class="masthead">
+    <span class="kicker">Phase 1 · Buyer Intelligence Platform</span>
+    <h1>Buyer Memory</h1>
+    <p class="deck">IndiaMART has solved supplier discovery. The next opportunity is buyer continuity — every procurement becomes context for the next one.</p>
+  </header>
+
+  <hr class="rule">
+
+  <section>
+    <span class="kicker">Problem</span>
+    <h2>The buyer journey ends at the enquiry</h2>
+    <p>IndiaMART has excellent visibility until a buyer sends an RFQ. After that, procurement moves to calls, WhatsApp and email, and every future purchase starts again from zero — even though years of search, RFQ and supplier-interaction history already sit inside the platform, mostly unused.</p>
+  </section>
+
+  <section>
+    <span class="kicker">Insight</span>
+    <h2>The opportunity isn't transactions. It's memory.</h2>
+    <p>IndiaMART doesn't need to own the transaction to own the intelligence. Search history, RFQ history and supplier-interaction history are all data IndiaMART already has — enough to make every next procurement faster without waiting on data it doesn't and may never control.</p>
+  </section>
+
+  <section>
+    <span class="kicker">Decision</span>
+    <h2>Buyer Memory — a platform, not a feature</h2>
+    <p>Buyer Memory is a single layer that every screen reads from and writes to — search, RFQ, supplier listing, notifications. Nothing else is redesigned. It shows up as a small set of Phase 1 capabilities:</p>
+    <ul>
+      <li><b>Procurement Workspace</b> — active requirements as ongoing entities, not disposable RFQs</li>
+      <li><b>Smart Reordering</b> — surfaces recurring purchases before the buyer has to remember them</li>
+      <li><b>Requirement Reuse</b> — checks history before showing a blank form</li>
+      <li><b>Recommendations</b> — always explained, never a bare "recommended" label</li>
+      <li><b>Market Intelligence</b> — trend signals tied to the buyer's own active procurements</li>
+      <li><b>Suppliers You Know</b> — quick access by engagement frequency, not a vendor-management system</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="kicker">Trade-off</span>
+    <h2>What this deliberately does not try to be</h2>
+    <p>Several adjacent ideas were considered and set aside for Phase 1 — not because they're wrong, but because they need something Buyer Memory has to build first:</p>
+    <table>
+      <tr><th>Idea</th><th>Why not yet</th></tr>
+      <tr><td>Vendor Management</td><td>Needs buyer-supplier relationship data this platform hasn't accumulated yet</td></tr>
+      <tr><td>Procurement Tracking</td><td>IndiaMART doesn't own transaction completion, delivery or order value</td></tr>
+      <tr><td>AI chat / negotiation</td><td>Without memory, AI has no context — it becomes a generic chatbot</td></tr>
+      <tr><td>ERP-style features</td><td>Outside IndiaMART's positioning; the platform should stay lightweight</td></tr>
+    </table>
+    <div class="callout"><b>The safeguard that matters most:</b> personalization is capped so it never quietly starves new-supplier discovery. "Previously Engaged" suppliers are capped at 40% of listing slots, and "Explore Marketplace" always keeps at least 2 slots above the fold — because supplier subscriptions still depend on new-buyer reach, and that's the one trade-off Buyer Memory cannot get wrong.</div>
+  </section>
+
+  <section>
+    <span class="kicker">Measurement</span>
+    <h2>What changes, and for whom</h2>
+    <p>The platform only matters if it moves something on all three sides of the marketplace — not just buyer convenience:</p>
+    <div class="impact-cols">
+      <div>
+        <div class="impact-head">Buyer</div>
+        <ul class="impact-list">
+          <li>Fewer fake / low-intent enquiries to sort through</li>
+          <li>Less cognitive load — memory does the repeat work</li>
+          <li>Higher trust in IndiaMART as a sourcing partner</li>
+        </ul>
+      </div>
+      <div>
+        <div class="impact-head">Supplier</div>
+        <ul class="impact-list">
+          <li>Fewer junk enquiries, more relevant ones</li>
+          <li>Higher buyer retention on the platform</li>
+          <li>Better buyer-supplier match quality</li>
+        </ul>
+      </div>
+      <div>
+        <div class="impact-head">IndiaMART</div>
+        <ul class="impact-list">
+          <li>Buyer retention and supplier renewal, both up</li>
+          <li>Organised behavioural data → faster decisions</li>
+          <li>Compounding asset: better data makes the AI better</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:18px;">If IndiaMART could track only one number to know whether this is actually working, it wouldn't be enquiry count — the very metric the platform runs on today is the one this proposal argues against optimizing the buyer experience for:</p>
+    <div class="north-star">
+      <div class="box"><div class="label">Optimizes today for</div><div class="val">Number of enquiries</div></div>
+      <div class="arrow">→</div>
+      <div class="box"><div class="label">Should optimize for</div><div class="val">Time to confident supplier selection</div></div>
+    </div>
+    <p class="footnote">This is a proxy, not a confirmed outcome — IndiaMART can't see whether a purchase actually completed offline. It's tracked alongside a Lead Concentration Index, which watches the 40% cap above and is the metric that would catch this platform quietly hurting new-supplier reach before it became a problem. Note this is about what drives buyer-facing product decisions, not about abandoning enquiry volume as a business metric — that's exactly what the Lead Concentration Index protects.</p>
+  </section>
+
+  <hr class="rule">
+
+  <section>
+    <span class="kicker">Prototype</span>
+    <h2>How to read the working prototype</h2>
+    <div class="howto">
+      <ol>
+        <li><b>Persona toggle</b> (top left) — switch between a returning buyer with history and a brand-new buyer to see the cold-start fallback.</li>
+        <li><b>Buyer Experience tab</b> — everything is real and clickable: continue a procurement, shortlist and mark suppliers won, post a requirement, reorder, dismiss a recommendation.</li>
+        <li><b>Platform View tab</b> — "This session" metrics genuinely update from what you just clicked; "At marketplace scale" metrics are illustrative example numbers, not computed from the demo, and are labeled as such.</li>
+      </ol>
+    </div>
+    <p class="footnote">The prototype is built to demonstrate product and platform thinking, not final visual design — treat the interaction model as the artifact, not the pixels.</p>
+  </section>
+</div>
+
+</body>
+</html>
